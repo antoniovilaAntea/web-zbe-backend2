@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      style="background-image: linear-gradient(rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.25)), url('Resources/img/background.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3)
+      ">
+    <ui:insert name="menu">
+        <h:head>
+
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <style>
+                .logo-img a {
+                    display: flex;
+                    justify-content: center;
+                    height: 100px;
+                    padding: 10px
+                }
+
+                .logo-img a img {
+                    padding-top: 10px
+                }
+
+                .menu {
+                    background-color: #007ad9;
+                    top:0;
+                    left: 0;
+                    width: 300px;
+                    height: 100%;
+                    position: fixed;
+                    z-index: 9999
+                }
+
+                .lista {
+                    padding-top: 50px;
+                    display: flex;
+                    justify-content: left;
+                    margin-left: 40px
+                }
+
+                .menu ul{
+
+                    margin-top: 30px !important
+                }
+
+                .footer{
+                    bottom: 0;
+                    position: fixed;
+                    padding-bottom: 50px
+                }
+
+                ul {
+                    list-style: none;
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+
+                }
+
+                ui-menuitem-text ,li{
+                    color: #DDD;
+                    font-size: 17px;
+                    margin-top: 5px;
+                    ;
+
+                }
+                .menu li:hover {
+                    color: #007ad9;
+                    background-color: #EEE;
+                    max-width: 215px !important;
+                    cursor: pointer;
+                    border-radius: 5px !important;
+                    max-height: 40px;
+                    min-height: 30px;
+                    display: flex;
+                    align-items: center;
+
+                }
+
+                .menu .ui-state-hover{
+                    padding-left: 10px !important;
+                    width: 215px !important;
+                    border-radius: 5px !important;
+                    height: 60px;
+                    display: flex !important;
+                    align-items: center;
+                    margin-top: 0 !important;
+                }
+
+                .menu li:hover ul {
+                    background-color: #007ad9 !important
+                }
+
+                .ui-menuitem-active>.ui-menuitem-link .ui-icon, .ui-menuitem-active>.ui-menuitem-link .ui-menuitem-text, body .ui-menu .ui-menu-list .ui-menuitem.ui-menuitem-active>.ui-menuitem-link   {
+                    color: #007ad9 !important;
+                    background-color: transparent !important;
+
+                }
+
+                .menu:not(:hover){
+                    display: none;
+                }
+
+
+                .ui-menu {
+                    background: transparent !important;
+                    border: none !important;
+                }
+
+                .ui-menuitem-text:not(:hover), .ui-icon {
+                    color: #DDD !important
+                }
+
+            </style>
+
+        </h:head>
+
+        <h:body>
+
+            <div class="menu">
+                <div  class="logo-img">
+                    <a href="Inicio.xhtml"><img src="Resources/img/logo-antea.com" /></a>
+                </div>
+
+                <h:form class="lista">
+                    <p:tieredMenu at="bottom" >
+                        <p:submenu label="Autopistas y autovias">
+                            <p:menuitem value="Nivel de servicio" outcome="NivelServicioAutopistas" />
+                            <p:menuitem value="Nivel de servicio ramales" outcome="NivelServicioRamalesAutopistas" />
+                            <p:menuitem value="Nivel de servicio trenzados" outcome="NivelServicioTrenzadosAutopistas"  />
+                            <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaAutopistas" />
+                            <p:menuitem value="Geometría de la vía" outcome="GeometriaAutopistas" />
+                        </p:submenu>
+
+                        <p:submenu label="Otras vías con calzadas separadas">
+                            <p:menuitem value="Nivel de servicio" outcome="NivelServicioOtrasVias" />
+                            <p:menuitem value="Nivel de servicio ramales" outcome="NivelServicioRamalesOtrasVias" />
+                            <p:menuitem value="Nivel de servicio trenzados" outcome="NivelServicioTrenzadosOtrasVias" />
+                            <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaOtrasVias" />
+                            <p:menuitem value="Geometría de la vía" outcome="GeometriaOtrasVias" />
+                        </p:submenu>
+
+                        <p:submenu label="Carreteras convencionales"> 
+                            <p:menuitem value="Nivel de servicio ramales" outcome="NivelServicioRamalesConvencionales" />
+                            <p:menuitem value="Nivel de servicio trenzados" outcome="NivelServicioTrenzadosConvencionales" />
+                            <p:submenu label="Analisís estándar">
+                                <p:menuitem value="Nivel de servicio" outcome="NivelServicioConvencionalesEstandar"/>
+                                <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaConvencionalesEstandar" />
+                                <p:menuitem value="Geometría de la vía" outcome="GeometriaConvencionalesEstandar" />
+                            </p:submenu>
+
+                            <p:submenu label="Analisís direccional">
+                                <p:menuitem value="Nivel de servicio" outcome="NivelServicioConvencionalesDireccional"/>
+                                <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaConvencionalesDireccional"/>
+                                <p:menuitem value="Geometría de la vía" outcome="GeometriaConvencionalesDireccional" />
+                            </p:submenu>   
+                        </p:submenu>
+
+                        <p:submenu label="Glorietas interurbanas">
+                            <p:menuitem value="Cálculo de capacidad" outcome="CapacidadEntradaGlorietas" />
+                        </p:submenu>
+                    </p:tieredMenu>
+                </h:form>
+                <div class="footer">
+                    <ul>
+                        <li><a href="Ayuda.xhtml" style="font-style: normal; text-decoration: none; width: inherit">Ayuda</a></li>
+                        <li><a href="Acercade.xhtml" style="font-style: normal; text-decoration: none;width: inherit ">Acerca de...</a></li>
+                    </ul>
+                </div>
+            </div>
+        </h:body>
+    </ui:insert>
+</html>

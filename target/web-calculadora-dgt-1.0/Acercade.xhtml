@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      style="background-image: linear-gradient(rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.25)), url('Resources/img/background.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.3)
+      "
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+        <title>Acerca de...</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="./css/predet.css" /> 
+        <style>
+            header {
+                color: #EEE;
+                font-size: 30px;
+                display: flex;
+                justify-content: center;
+                padding-top: 40px
+            }
+
+            .hamburguer-menu:active ~ .menu {
+                display: block
+            }
+
+            .ui-breadcrumb{
+                background: transparent !important;
+                border: none !important;
+                margin-left: 150px
+            }
+
+            .ui-breadcrumb li a{
+                color: #EEE !important;
+            }
+
+            .ui-breadcrumb li a:hover{
+                color: #007ad9 !important;
+            }
+
+
+            .ui-breadcrumb li a span{
+                color: #EEE !important;
+                cursor: default;
+
+            }
+            .ui-breadcrumb li:before{
+                color: #EEE !important;
+
+            }
+
+            .ui-breadcrumb-items {
+                display: flex;
+                flex-direction: row;
+                list-style: none;
+
+            }
+
+            .footer ul li {
+                width: 200px;
+                height: 30px;
+                padding: 0.8rem
+            }
+
+            .footer ul li a:hover{
+                color: #007ad9 !important;
+            }
+
+            .footer ul li:hover a{
+                color: #007ad9 !important;
+            }
+
+            .footer ul li:not(:hover) a{
+                color:#eee !important;
+            }
+
+
+            .ui-divider.ui-divider-horizontal:before{
+                border-top: 5px transparent
+            }
+
+            .contenido{
+                color: #EEE;
+                display:flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 22px
+            }
+            .texto-programacion, .texto-ingeniero, .lista-programadores li {
+                font-size: 22px
+            }
+            .lista-equipo {
+                list-style: disc
+            }
+        </style>
+
+    </h:head>
+
+    <h:body>
+        <header>Acerca de...</header>
+        <img class="hamburguer-menu" src="Resources/img/bars-solid.svg" height="30px" style="filter: invert(1); border: none; margin-left: 50px;cursor: pointer" />
+
+        <h:form style="margin-bottom: 15px;">             <p:breadCrumb class="breadcrumb">
+                <p:menuitem value="home" outcome="Inicio"/>
+                <p:menuitem value="Acerca de..."/>
+            </p:breadCrumb>
+        </h:form>
+
+        <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+
+        <div class="contenido" >
+            <div class="logo">
+                <img src="Resources/img/logo-antea.com" />
+            </div>
+            <div class="texto">
+                <h4 class="texto-app">Aplicación para el cálculo de niveles de servicio: metodología del HCM200</h4>
+                <p class="texto-equipo">Equipo de desarrollo:</p>
+                <ul class="lista-equipo">
+                    <li class="texto-programacion">Responsables de programación:</li>
+                    <ul class="lista-programadores">
+                        <li><b>Pablo Freire Legaspi</b></li>
+                        <li><b>Antonio Vila Portela</b></li>
+                    </ul>
+                    <li class="texto-programacion" >Ingenieros responsables: </li>
+                    <ul class="lista-programadores" >
+                        <li class="texto-ingeniero">Ingeniero de Caminos, Canales y Puertos: <b>David Cota Mascuñana</b></li>
+                        <li class="texto-ingeniero">Ingeniero de Caminos y Minas: <b>Javier Álvarez Fidalgo</b></li>
+                        <li class="texto-ingeniero">Ingeniero de Obras Públicas: <b>David Vázquez Novo</b></li>
+
+                    </ul>
+                </ul>
+            </div>
+
+        </div>
+    </h:body>
+</html>

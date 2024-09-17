@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      style="background-image: linear-gradient(rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.25)), url('Resources/img/backSinLogo.jpeg');
+      background-size: cover;
+      background-repeat: repeat-y;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+
+      ">
+
+    <h:head>
+        <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+        <title> Niveles de servicio</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+
+            .titulo{
+                display: flex;
+                align-content: center;
+                align-items: center;
+                justify-content: center;
+                margin-top: 0px;
+            }
+            h1 {
+                color: #EEE;
+            }
+
+            form {
+                display: grid;
+                grid-template-columns: 1fr 1fr ;
+                grid-column-gap: 25px;
+                justify-items: center;
+            }
+
+            .ui-panel-content{
+                border: none !important;
+                background: transparent !important;
+            }
+
+            .ui-menubutton {
+                padding-top: 75px;
+                padding-bottom:250px;
+            }
+
+            .ui-button-text {
+                padding: .629rem 1.5rem .629rem 2.7rem !important;
+            }
+
+            #footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                display: flex;
+                z-index: 10;
+                flex-direction: row;
+                align-items: center;
+                background-color: rgba(0,122,217, 0.8);
+                color: #EEE;
+                width: 100%;
+                height: 75px
+            }
+
+            #footer img {
+                height: 60px;
+                width: 120px;
+                position: absolute;
+                left: 90px
+            }
+
+            #footer ul {
+                list-style: none;
+                display: flex;
+                flex-direction: row;
+                position: absolute;
+                right: 90px
+
+            }
+            #footer ul li a {
+                margin-right: 20px;
+                color: #eee !important ;
+            }
+
+            .botones{
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </h:head>
+
+
+    <h:body>
+        <div class="titulo">
+            <h1>Calculo individual de niveles de servicio - Metodología HCM 2016</h1>
+        </div>
+
+        <p:panel class="botones">
+            <h:form>
+                <p:menuButton value="Autopistas y autovias">
+                    <p:menuitem value="Nivel de servicio" outcome="NivelServicioAutopistas" />
+                    <p:menuitem value="Nivel de servicio ramales" outcome="NivelServicioRamalesAutopistas"  />
+                    <p:menuitem value="Nivel de servicio trenzados" outcome="NivelServicioTrenzadosAutopistas"/>
+                    <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaAutopistas" />
+                    <p:menuitem value="Geometría de la vía" outcome="GeometriaAutopistas" />
+                </p:menuButton>
+
+                <p:menuButton value="Otras vías con calzadas separadas">
+                    <p:menuitem value="Nivel de servicio" outcome="NivelServicioOtrasVias"/>
+                    <p:menuitem value="Nivel de servicio ramales" outcome="NivelServicioRamalesOtrasVias" />
+                    <p:menuitem value="Nivel de servicio trenzados" outcome="NivelServicioTrenzadosOtrasVias"/>
+                    <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaOtrasVias" />
+                    <p:menuitem value="Geometría de la vía" outcome="GeometriaOtrasVias" />
+                </p:menuButton>
+
+                <p:menuButton value="Carreteras convencionales">
+                    <p:menuitem value="Nivel de servicio ramales" outcome="NivelServicioRamalesConvencionales"  />
+                    <p:menuitem value="Nivel de servicio trenzados" outcome="NivelServicioTrenzadosConvencionales" />
+                    <p:submenu label="Analisís estándar">
+                        <p:menuitem value="Nivel de servicio" outcome="NivelServicioConvencionalesEstandar"/>
+                        <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaConvencionalesEstandar" />
+                        <p:menuitem value="Geometría de la vía" outcome="GeometriaConvencionalesEstandar" />
+                    </p:submenu>
+                    <p:submenu label="Analisís direccional">
+                        <p:menuitem value="Nivel de servicio" outcome="NivelServicioConvencionalesDireccional"/>
+                        <p:menuitem value="Intensidad máxima" outcome="IntensidadMaximaConvencionalesDireccional"/>
+                        <p:menuitem value="Geometría de la vía" outcome="GeometriaConvencionalesDireccional"/>
+                    </p:submenu>    
+
+                </p:menuButton>
+
+                <p:menuButton value="Glorietas interurbanas">
+                    <p:menuitem value="Cálculo de capacidad" outcome="CapacidadEntradaGlorietas" />
+
+                </p:menuButton>
+            </h:form>
+        </p:panel>
+
+        <div id="footer">
+            <img src="Resources/img/logo-antea.com" />
+            <a href="./" style="right:50%; left:50%; position: absolute; font-style: normal; text-decoration: none; margin-right: 20px;color: #eee !important; display: flex; flex-direction:column; align-items: center "><i class="pi pi-home"></i>Inicio</a>
+            <ul>
+                <li><a href="Ayuda.xhtml" style="font-style: normal; text-decoration: none;">Ayuda</a></li>
+                <li><a href="Acercade.xhtml" style="font-style: normal; text-decoration: none; ">Acerca de...</a></li>
+            </ul>
+        </div>
+    </h:body>
+
+</html>

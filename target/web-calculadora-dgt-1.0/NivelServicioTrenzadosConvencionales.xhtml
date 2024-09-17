@@ -1,0 +1,1167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+      url('Resources/img/background.png');
+    background-size: cover;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+  "
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+  <h:head>
+    <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+    <title>Nivel de servicio trenzados - Carreteras convencionales</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/predet.css" />
+    <style>
+      .intensidad {
+        grid-column: 1;
+        grid-row: 1/3;
+      }
+
+      .velocidad {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .geometria {
+        grid-column: 1;
+        grid-row: 3;
+      }
+      .varios {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      .adicionales {
+        grid-column: 2;
+        grid-row: 3;
+      }
+      .adicionales .ui-fieldset-content input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .nivel_servicio {
+        grid-column: 1/3;
+        grid-row: 4;
+        width: 95% !important;
+      }
+      .nivel_servicio .input {
+        margin-bottom: 0;
+      }
+      .nivel_servicio .ui-fieldset-content {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+      }
+      .nivel_servicio .ui-fieldset-content .input .servicio_input input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+
+      .servicio_input {
+        display: flex;
+        flex-direction: column;
+        width: 75%;
+      }
+      .capacidad_inputs input,
+      .servicio_input input {
+        margin-bottom: 3px;
+      }
+      .capacidad_inputs {
+        margin-right: 8px;
+        margin-left: 100px;
+      }
+
+      .capacidad_VhCS label {
+        margin-right: 8px;
+      }
+
+      .capacidad_VhCS .capacidad_input div label {
+        margin-left: 8px;
+      }
+
+      .tablaDatos tbody tr td,
+      .tablaDatos2 tbody tr td,
+      .tablaVariables tbody tr td {
+        padding: 0.45em;
+        text-align: center;
+
+        label {
+          color: #007ad8;
+        }
+      }
+      .tablaDatos thead,
+      .tablaDatos2 thead,
+      .tablaVariables thead {
+        border-bottom: 1px #007ad8 dotted;
+        background-color: #0071d8;
+        color: #f7f7f7;
+      }
+    </style>
+  </h:head>
+
+  <h:body>
+    <header>Nivel de servicio trenzados</header>
+    <img
+      class="hamburguer-menu"
+      src="Resources/img/bars-solid.svg"
+      height="30px"
+      style="
+        filter: invert(1);
+        border: none;
+        margin-left: 50px;
+        cursor: pointer;
+      "
+    />
+
+    <h:form style="margin-bottom: 15px">
+      <p:breadCrumb class="breadcrumb">
+        <p:menuitem class="home" value="home" outcome="Inicio" />
+        <p:menuitem value="Carreteras convencionales" />
+        <p:menuitem value="Nivel de servicio trenzados" />
+      </p:breadCrumb>
+    </h:form>
+
+    <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+    <h:form class="formulario" id="form">
+      <p:growl escape="false" id="growl" showDetail="true" />
+      <p:fieldset
+        class="intensidad"
+        legend="Intensidad y FHP"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D 1 T (Vehículos que trenzan)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imd1TPorcentaje"
+              onchange="disableInputIntensidad1T()"
+              value="#{nivelServTrenzadoConvencionales.imd1TPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imd1T"
+              inputmode="decimal"
+              decimalPlaces="0"
+              onchange="disableInputIntensidad1T()"
+              value="#{nivelServTrenzadoConvencionales.imd1T}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad 1 T horaria (Vehículos que trenzan)"
+          />
+          <p:inputNumber
+            onchange="disableInputImd1T()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServTrenzadoConvencionales.intensidad1T}"
+            id="intensidad1TInput"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D 2 T (Vehículos que trenzan)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imd2TPorcentaje"
+              onchange="disableInputIntensidad2T()"
+              value="#{nivelServTrenzadoConvencionales.imd2TPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imd2T"
+              inputmode="decimal"
+              decimalPlaces="0"
+              onchange="disableInputIntensidad2T()"
+              value="#{nivelServTrenzadoConvencionales.imd2T}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad 2 T horaria (Vehículos que trenzan)"
+          />
+          <p:inputNumber
+            onchange="disableInputImd2T()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServTrenzadoConvencionales.intensidad2T}"
+            id="intensidad2TInput"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D 1 N T (Vehículos que no trenzan)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imd1NTPorcentaje"
+              onchange="disableInputIntensidad1NT()"
+              value="#{nivelServTrenzadoConvencionales.imd1NTPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imd1NT"
+              inputmode="decimal"
+              decimalPlaces="0"
+              onchange="disableInputIntensidad1NT()"
+              value="#{nivelServTrenzadoConvencionales.imd1NT}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad 1 N T horaria (Vehículos que no trenzan)"
+          />
+          <p:inputNumber
+            onchange="disableInputImd1NT()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServTrenzadoConvencionales.intensidad1NT}"
+            id="intensidad1NTInput"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D 2 N T (Vehículos que no trenzan)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imd2NTPorcentaje"
+              onchange="disableInputIntensidad2NT()"
+              value="#{nivelServTrenzadoConvencionales.imd2NTPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imd2NT"
+              inputmode="decimal"
+              decimalPlaces="0"
+              onchange="disableInputIntensidad2NT()"
+              value="#{nivelServTrenzadoConvencionales.imd2NT}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad 2 N T horaria (Vehículos que no trenzan)"
+          />
+          <p:inputNumber
+            onchange="disableInputImd2NT()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServTrenzadoConvencionales.intensidad2NT}"
+            id="intensidad2NTInput"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="F.H.P (Factor Hora Punta)" />
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.fhp}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="velocidad"
+        legend="Velocidad"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; max-height: 150px"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Velocidad de los veh. que trenzan (km/h)"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.velocidadTrenzan}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Velocidad de los veh. que no trenzan (km/h)" />
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.velocidadNoTrenzan}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="geometria"
+        legend="Geometría de la vía"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; margin-bottom: 10px"
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Configuración de trenzado"></p:outputLabel>
+          <p:selectOneMenu
+            id="ramal_analizado"
+            value="#{nivelServTrenzadoConvencionales.configuracionTrenzado}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="A" itemValue="A" />
+            <f:selectItem itemLabel="B" itemValue="B" />
+            <f:selectItem itemLabel="C" itemValue="C" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel
+            value="Nº total de carriles del tramo trenzado"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.numeroCarrilesTramoTrenzado}"
+          >
+          </p:inputNumber>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel
+            value="Longitud total del tramo trenzado"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.longitudTotalTramoTrenzado}"
+          >
+          </p:inputNumber>
+
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="adicionales"
+        legend="Datos adicionales"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad veh. que trenzan (Veh. equiv/hora)"
+          ></p:outputLabel>
+          <p:inputNumber
+            id="intensidadTrenzan"
+            readonly="true"
+            value="#{nivelServTrenzadoConvencionales.intensidadVehTrenzan}"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad veh. que no trenzan (Veh. equiv/hora)"
+          ></p:outputLabel>
+          <p:inputNumber
+            id="intensidadNoTrenzan"
+            readonly="true"
+            value="#{nivelServTrenzadoConvencionales.intensidadVehNoTrenzan}"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Velocidad media espacial (km/h)"
+          ></p:outputLabel>
+          <p:inputNumber
+            id="velocidadMedia"
+            readonly="true"
+            value="#{nivelServTrenzadoConvencionales.velocidadMedia}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Densidad (Veh/km/carril)"></p:outputLabel>
+          <p:inputNumber
+            id="densidad"
+            readonly="true"
+            value="#{nivelServTrenzadoConvencionales.densidad}"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="varios"
+        legend="Ajustes varios"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Ajuste por conductores no habituales"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.conductoresNoHabituales}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          >
+          </p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (camiones y autobuses)" />
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.pesadosCamiones}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (vehículos de recreo)" />
+          <p:inputNumber
+            value="#{nivelServTrenzadoConvencionales.pesadosRecreo}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Tipo de terreno" />
+          <p:selectOneMenu
+            id="terreno"
+            value="#{nivelServTrenzadoConvencionales.tipoTerreno}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="Llano" itemValue="Llano" />
+            <f:selectItem itemLabel="Ondulado" itemValue="Ondulado" />
+            <f:selectItem itemLabel="Accidentado" itemValue="Accidentado" />
+          </p:selectOneMenu>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="nivel_servicio"
+        legend="Cálculo nivel de servicio"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-right: 50px;
+          "
+        >
+          <p:commandButton
+            value="Calcular"
+            style="margin-right: 50px; width: 150px; font-size: 22px"
+            action="#{nivelServTrenzadoConvencionales.calculo()}"
+            update="growl velocidadMedia intensidadTrenzan intensidadNoTrenzan densidad porcAgotamiento form:intensidad1TInput form:intensidad2TInput form:intensidad1NTInput form:intensidad2NTInput resultado"
+          >
+          </p:commandButton>
+          <div class="servicio_input">
+            <p:inputText
+              id="resultado"
+              value="#{nivelServTrenzadoConvencionales.resultadoCalculo}"
+              readonly="true"
+            ></p:inputText>
+            <p:progressBar
+              id="porcAgotamiento"
+              value="#{nivelServTrenzadoConvencionales.porcentajeAgotamiento}"
+              labelTemplate="% de Agotamiento: #{nivelServTrenzadoConvencionales.porcentajeAgotamiento}%"
+              displayOnly="true"
+              style="height: 24px; display: flex; align-items: center"
+            />
+          </div>
+        </div>
+      </p:fieldset>
+    </h:form>
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <h:form id="prueba">
+        <p:commandButton
+          value="Ver tabla de variales"
+          onclick="PF('dlgTablas').show();"
+          style="
+            width: 240px;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-right: 15px;
+          "
+          update="tabla1 tabla2 tabla3 tabla4 tabla5 tabla6 tabla7 tabla8 tabla9 tabla10 tabla11 tabla12 tabla13 tabla14 tabla15 tabla16 tabla17 tabla18 tabla19 tabla20 tabla21 tabla22 tabla23 tabla24 tabla25 tabla26 tabla27 tabla28 tabla29 tabla30 tabla31 tabla32 tabla33 tabla34 tabla35 tabla36 tabla37 tabla38 tabla39 "
+        ></p:commandButton>
+        <p:dialog
+          header="Carreteras convencionales - Nivel de servicio trenzados - HCM 2016"
+          widgetVar="dlgTablas"
+          modal="true"
+          width="90%"
+          height="90%"
+        >
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; flex-direction: row">
+              <table
+                style="text-align: center; text-align: center; width: 33%"
+                class="tablaDatos"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>% de la IMD 1 T (Vehículos que trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd1TPorcentaje}"
+                        id="tabla1"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD 1 T (Vehículos que trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd1T}"
+                        id="tabla2"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad 1 T horaria (Vehículos que trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.intensidad1T}"
+                        id="tabla3"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD 2 T (Vehículos que trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd2TPorcentaje}"
+                        id="tabla4"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD 2 T (Vehículos que trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd2T}"
+                        id="tabla5"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad 2 T horaria (Vehículos que trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.intensidad2T}"
+                        id="tabla6"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD 1 N T (Vehículos que no trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd1NTPorcentaje}"
+                        id="tabla7"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD 1 N T (Vehículos que no trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd1NT}"
+                        id="tabla8"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad 1 N T horaria (Vehículos que no trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.intensidad1NT}"
+                        id="tabla9"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD 2 N T (Vehículos que no trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd2NTPorcentaje}"
+                        id="tabla10"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>IMD 2 N T (Vehículos que no trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.imd2NT}"
+                        id="tabla11"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad 2 N T horaria (Vehículos que no trenzan)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.intensidad2NT}"
+                        id="tabla12"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>FHP (Factor Hora Punta)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.fhp}"
+                        id="tabla13"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad de los veh. que trenzan (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.velocidadTrenzan}"
+                        id="tabla14"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad de los veh. que no trenzan (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.velocidadNoTrenzan}"
+                        id="tabla15"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table
+                style="
+                  text-align: center;
+                  width: 33%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaDatos2"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Ajuste por conductores no habituales</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.conductoresNoHabituales}"
+                        id="tabla16"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (camiones y autobuses)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.pesadosCamiones}"
+                        id="tabla17"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (veh. de recreo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.pesadosRecreo}"
+                        id="tabla18"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipo de terreno</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.tipoTerreno}"
+                        id="tabla19"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Configuración de trenzado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.configuracionTrenzado}"
+                        id="tabla20"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nº total de carriles del tramo trenzado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.numeroCarrilesTramoTrenzado}"
+                        id="tabla21"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Longitud total del tramo trenzado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.longitudTotalTramoTrenzado}"
+                        id="tabla22"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad veh. que trenzan (Veh.equiv/hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.intensidadVehTrenzan}"
+                        id="tabla23"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad veh. que no trenzan (Veh.equiv/hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.intensidadVehNoTrenzan}"
+                        id="tabla24"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad media espacial (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.velocidadMedia}"
+                        id="tabla25"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Densidad (Veh/km/carril)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.densidad}"
+                        id="tabla26"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Nivel de servicio</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.resultadoCalculo}"
+                        id="tabla27"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de Agotamiento</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.porcentajeAgotamiento}"
+                        id="tabla28"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table
+                style="
+                  text-align: center;
+                  width: 33%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaVariables"
+              >
+                <thead>
+                  <th>Variable intermedia de los calculos</th>
+                  <th>Valor</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Factor equivalencia - Vehículos pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.factorEquivalenciaVehPesados}"
+                        id="tabla29"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor equivalencia - Vehículos de recreo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.factorEquivalenciaVehRecreo}"
+                        id="tabla30"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ajuste Vehículos pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.ajusteVehiculosPesados}"
+                        id="tabla31"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Relación de intensidad)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.relacionDeIntensidad}"
+                        id="tabla32"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Factor equivalencia - Intensidad de vehículos que trenzan
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.factorIntensidadTrenzadoSi}"
+                        id="tabla33"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Factor equivalencia - Intensidad de vehículos que no
+                      trenzan
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.factorIntensidadTrenzadoNo}"
+                        id="tabla34"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad tramo trenzado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.velocidadPrimaDelTramoTrenzado}"
+                        id="tabla35"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad tramo no trenzado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.velocidadPrimaDelTramoNoTrenzado}"
+                        id="tabla36"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad equivalente - Tramo trenzado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.iTequivalente}"
+                        id="tabla37"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad equivalente - Tramo no trenzado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.iNtEquivalente}"
+                        id="tabla38"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad equivalente - Total</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServTrenzadoConvencionales.iEquivalenteTotal}"
+                        id="tabla39"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+          </div>
+        </p:dialog>
+        <!-- <p:commandButton
+          value="Informe"
+          onclick="PF('dlg2').show();"
+          style="width: 240px; margin-bottom: 10px; margin-top: 15px"
+          update="panelInforme"
+        ></p:commandButton> -->
+        <p:dialog
+          header="Crear informe"
+          widgetVar="dlg2"
+          modal="true"
+          width="386"
+        >
+          <div style="display: flex; flex-direction: column">
+            <h:outputLabel value="Descripción del informe" />
+            <br />
+            <p:inputTextarea
+              value="#{nivelServTrenzadoConvencionales.decripcion}"
+            ></p:inputTextarea>
+            <br />
+            <p:commandButton
+              value="Abrir en Nueva Pestaña"
+              action="#{nivelServTrenzadoConvencionales.generarInforme()}"
+              ajax="true"
+              id="panelInforme"
+            />
+          </div>
+        </p:dialog>
+      </h:form>
+    </div>
+    <script src="javascript/NivelServicio.js"></script>
+  </h:body>
+</html>

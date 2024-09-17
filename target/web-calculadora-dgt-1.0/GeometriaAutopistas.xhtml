@@ -1,0 +1,1108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+      url('Resources/img/background.png');
+    background-size: cover;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+  "
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+  <h:head>
+    <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+    <title>Geometría de la vía - Autopistas y autovias</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/predet.css" />
+    <style>
+      .intensidad {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .velocidad {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .geometria {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .geometria .ui-fieldset-content .ui-selectonemenu label {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+
+      .varios {
+        grid-column: 2;
+        grid-row: 2/4;
+      }
+      .adicionales {
+        grid-column: 1;
+        grid-row: 3;
+      }
+      .adicionales .ui-fieldset-content input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .nivel_servicio {
+        grid-column: 1/3;
+        grid-row: 4;
+      }
+      .nivel_servicio .input {
+        margin-bottom: 0;
+      }
+      .nivel_servicio .ui-fieldset-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+      }
+      .nivel_servicio .ui-fieldset-content div input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .servicio_input {
+        display: flex;
+        flex-direction: column;
+      }
+      .capacidad_inputs input,
+      .servicio_input input {
+        margin-bottom: 3px;
+      }
+      .capacidad_inputs {
+        margin-right: 8px;
+        margin-left: 50px;
+      }
+
+      .capacidad_VhCS label {
+        margin-right: 8px;
+      }
+
+      .capacidad_VhCS .capacidad_input div label {
+        margin-left: 8px;
+      }
+      .tablaDatos tbody tr td,
+      .tablaVariables tbody tr td {
+        padding: 0.3em;
+        text-align: center;
+
+        label {
+          color: #007ad8;
+        }
+      }
+      .tablaDatos thead,
+      .tablaVariables thead {
+        border-bottom: 1px #007ad8 dotted;
+        background-color: #0071d8;
+        color: #f7f7f7;
+      }
+    </style>
+  </h:head>
+
+  <h:body>
+    <header>Geometría de la vía</header>
+    <img
+      class="hamburguer-menu"
+      src="Resources/img/bars-solid.svg"
+      height="30px"
+      style="
+        filter: invert(1);
+        border: none;
+        margin-left: 50px;
+        cursor: pointer;
+      "
+    />
+
+    <h:form style="margin-bottom: 15px">
+      <p:breadCrumb class="breadcrumb">
+        <p:menuitem class="home" value="home" outcome="Inicio" />
+        <p:menuitem value="Autopistas y autovías" />
+        <p:menuitem value="Geometría de la vía" />
+      </p:breadCrumb>
+    </h:form>
+
+    <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+    <h:form class="formulario" id="form">
+      <p:growl escape="false" id="growl" showDetail="true" />
+      <p:fieldset
+        class="intensidad"
+        legend="Nivel de servicio, intensidad y FHP"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Nivel de servicio"></p:outputLabel>
+          <div>
+            <p:selectOneMenu
+              id="servicio"
+              value="#{geometriaAutopistas.nivelServicio}"
+            >
+              <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+              <f:selectItem itemLabel="A-BLANCO" itemValue="A-BLANCO" />
+              <f:selectItem itemLabel="B-VERDE" itemValue="B-VERDE" />
+              <f:selectItem itemLabel="C-AMARILLO" itemValue="C-AMARILLO" />
+              <f:selectItem itemLabel="D-ROJO" itemValue="D-ROJO" />
+              <f:selectItem itemLabel="E-NEGRO" itemValue="E-NEGRO" />
+            </p:selectOneMenu>
+          </div>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D (por sentido de circulación)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imdPorcentaje"
+              onchange="disableInputIntensidad()"
+              value="#{geometriaAutopistas.imdPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imd"
+              onchange="disableInputIntensidad()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              value="#{geometriaAutopistas.imd}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad horario por sentido de circulación"
+          />
+          <p:inputNumber
+            onchange="disableInputImd()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{geometriaAutopistas.intensidadhoraria}"
+            id="intensidadInput"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="F.H.P (Factor Hora Punta)" />
+          <p:inputNumber
+            value="#{geometriaAutopistas.fhp}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="velocidad"
+        legend="Velocidad"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Velocidad medida en campo (km/h)"
+          ></p:outputLabel>
+          <p:inputNumber
+            id="velocidad_medida"
+            disabled="true"
+            value="#{geometriaAutopistas.velocidadMedida}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="V.L.B (Velocidad Libre Básica) de la vía (km/h)"
+          />
+          <p:inputNumber
+            id="vlb"
+            value="#{geometriaAutopistas.vlb}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="geometria"
+        legend="Geometría de la vía - Resultados del cálculo"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; max-height: 250px"
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel
+            value="Número de carriles por calzada (Min.)"
+          ></p:outputLabel>
+          <p:selectOneMenu
+            disabled="true"
+            id="carriles"
+            value="#{geometriaAutopistas.numCarriles}"
+          >
+            <f:selectItem itemLabel="Esperando calculo" itemValue="" />
+            <f:selectItem itemLabel="2" itemValue="2" />
+            <f:selectItem itemLabel="3" itemValue="3" />
+            <f:selectItem itemLabel="4" itemValue="4" />
+            <f:selectItem itemLabel="5" itemValue="5" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Anchura del carril(m.) (Min.)" />
+          <p:selectOneMenu
+            disabled="true"
+            id="anchura"
+            value="#{geometriaAutopistas.anchoCarril}"
+          >
+            <f:selectItem itemLabel="Esperando calculo" itemValue="" />
+            <f:selectItem itemLabel="3.0" itemValue="3.0" />
+            <f:selectItem itemLabel="3.1" itemValue="3.1" />
+            <f:selectItem itemLabel="3.2" itemValue="3.2" />
+            <f:selectItem itemLabel="3.3" itemValue="3.3" />
+            <f:selectItem itemLabel="3.4" itemValue="3.4" />
+            <f:selectItem itemLabel="3.5" itemValue="3.5" />
+            <f:selectItem itemLabel="3.6" itemValue="3.6" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 3.0 HASTA 3.6  -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Obstáculo a la derecha (m.) (Min.)" />
+          <p:selectOneMenu
+            disabled="true"
+            id="obstaculos"
+            value="#{geometriaAutopistas.obstaculoDerecha}"
+          >
+            <f:selectItem itemLabel="Esperando calculo" itemValue="99" />
+            <f:selectItem itemLabel="0.0" itemValue="0.0" />
+            <f:selectItem itemLabel="0.3" itemValue="0.3" />
+            <f:selectItem itemLabel="0.6" itemValue="0.6" />
+            <f:selectItem itemLabel="0.9" itemValue="0.9" />
+            <f:selectItem itemLabel="1.2" itemValue="1.2" />
+            <f:selectItem itemLabel="1.5" itemValue="1.5" />
+            <f:selectItem itemLabel="1.8" itemValue="1.8" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO 0.0,0.3,0.6,0.9,1.2,1.5,1.8  -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Enlaces por km. (Max.)" />
+          <p:selectOneMenu
+            disabled="true"
+            id="enlaces"
+            value="#{geometriaAutopistas.enlaces}"
+          >
+            <f:selectItem itemLabel="Esperando calculo" itemValue="" />
+            <f:selectItem itemLabel="0.3" itemValue="0.3" />
+            <f:selectItem itemLabel="0.4" itemValue="0.4" />
+            <f:selectItem itemLabel="0.5" itemValue="0.5" />
+            <f:selectItem itemLabel="0.6" itemValue="0.6" />
+            <f:selectItem itemLabel="0.7" itemValue="0.7" />
+            <f:selectItem itemLabel="0.8" itemValue="0.8" />
+            <f:selectItem itemLabel="0.9" itemValue="0.9" />
+            <f:selectItem itemLabel="1.0" itemValue="1.0" />
+            <f:selectItem itemLabel="1.1" itemValue="1.1" />
+            <f:selectItem itemLabel="1.2" itemValue="1.2" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 0.3 HASTA 1.2  -->
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="varios"
+        legend="Ajustes varios"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Ajuste por conductores no habituales"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{geometriaAutopistas.conductoresNoHabituales}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          >
+          </p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (camiones y autobuses)" />
+          <p:inputNumber
+            value="#{geometriaAutopistas.pesadosCamiones}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (vehículos de recreo)" />
+          <p:inputNumber
+            value="#{geometriaAutopistas.pesadosRecreo}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Tipo de terreno" />
+          <p:selectOneMenu
+            id="terreno"
+            value="#{geometriaAutopistas.tipoTerreno}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="Llano" itemValue="Llano" />
+            <f:selectItem itemLabel="Ondulado" itemValue="Ondulado" />
+            <f:selectItem itemLabel="Accidentado" itemValue="Accidentado" />
+          </p:selectOneMenu>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Cálculo específico rampa/pendiente" />
+          <p:selectOneRadio
+            id="especifico"
+            value="#{geometriaAutopistas.especifico}"
+            widgetVar="especifico"
+            onchange="especificoRampaSelect()"
+          >
+            <f:selectItem itemLabel="Si" itemValue="Si" />
+            <f:selectItem itemLabel="No" itemValue="No" />
+          </p:selectOneRadio>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% Rampa (ascendente)" />
+          <p:inputNumber
+            id="rampa"
+            onchange="especificoRampa()"
+            value="#{geometriaAutopistas.rampa}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% Pendiente (descendente)" />
+          <p:inputNumber
+            id="pendiente"
+            onchange="especificoRampa()"
+            value="#{geometriaAutopistas.pendiente}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Longitud de la rampa/pendiente (km)"
+          ></p:outputLabel>
+          <p:inputNumber id="longitud" value="#{geometriaAutopistas.longitud}">
+          </p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="adicionales"
+        legend="Datos adicionales"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad (Veh.equiv./hora/carril)"
+          ></p:outputLabel>
+          <p:inputNumber
+            readonly="true"
+            id="intensidad"
+            value="#{geometriaAutopistas.intensidad}"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Velocidad media de recorrido (km/h)" />
+          <p:inputNumber
+            readonly="true"
+            symbol="km/h"
+            symbolPosition="s"
+            id="velocidadMedia"
+            value="#{geometriaAutopistas.velocidadMedia}"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="nivel_servicio"
+        legend="Cálculo características de la vía"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 95%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            margin-right: 50px;
+            width: 30%;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              width: 100%;
+            "
+          >
+            <p:commandButton
+              value="Calcular"
+              style="width: 85%; font-size: 22px"
+              action="#{geometriaAutopistas.calculo()}"
+              update="growl carriles anchura obstaculos enlaces intensidadInput velocidadCapacidad densidad capacidadSentido capacidadCarril porcAgotamiento porcCapacidad intensidad velocidadMedia resultado"
+            />
+
+            <p:inputText
+              readonly="true"
+              id="resultado"
+              value="#{geometriaAutopistas.resultadoCalculo}"
+              style="width: 85%; text-align: center"
+            ></p:inputText>
+            <p:progressBar
+              id="porcAgotamiento"
+              value="#{geometriaAutopistas.porcAgotamiento}"
+              labelTemplate="% de Agotamiento: #{geometriaAutopistas.porcAgotamiento}%"
+              displayOnly="true"
+              style="
+                width: 85%;
+                height: 24px;
+                display: flex;
+                align-items: center;
+              "
+            />
+            <p:progressBar
+              id="porcCapacidad"
+              value="#{geometriaAutopistas.porcentajeSobreCapacidad}"
+              labelTemplate="% sobre Capacidad: #{geometriaAutopistas.porcentajeSobreCapacidad}%"
+              displayOnly="true"
+              style="
+                width: 85%;
+                height: 24px;
+                display: flex;
+                align-items: center;
+              "
+            />
+          </div>
+        </div>
+
+        <div
+          class="capacidad_servicio"
+          style="display: flex; flex-direction: row"
+        >
+          <div
+            class="capacidad_inputs"
+            style="display: flex; flex-direction: row; align-items: center"
+          >
+            <div
+              style="display: flex; flex-direction: row; align-items: center"
+            >
+              <p:outputLabel value="Capacidad" />
+              <div
+                class="capacidad_input"
+                style="display: flex; flex-direction: column; margin-left: 8px"
+              >
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                  "
+                >
+                  <p:inputNumber
+                    id="capacidadCarril"
+                    value="#{geometriaAutopistas.capacidadCarril}"
+                    readonly="true"
+                    style="margin-right: 8px"
+                  ></p:inputNumber>
+                  <p:outputLabel value="Veh./hora/carril"></p:outputLabel>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                  "
+                >
+                  <p:inputNumber
+                    id="capacidadSentido"
+                    value="#{geometriaAutopistas.capacidadSentido}"
+                    readonly="true"
+                    style="margin-right: 8px"
+                  ></p:inputNumber>
+                  <p:outputLabel value="Veh./hora/sentido"></p:outputLabel>
+                </div>
+              </div>
+            </div>
+            <div
+              class="capacidad_input"
+              style="display: flex; flex-direction: column; margin-left: 8px"
+            >
+              <div
+                style="
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: flex-end;
+                "
+              >
+                <p:outputLabel
+                  value="Densidad en capacidad (Veh./km)"
+                ></p:outputLabel>
+                <p:inputNumber
+                  value="#{geometriaAutopistas.densidadCapacidad}"
+                  id="densidad"
+                  readonly="true"
+                ></p:inputNumber>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: flex-end;
+                "
+              >
+                <p:outputLabel
+                  value="Velocidad en capacidad (km/h)"
+                ></p:outputLabel>
+                <p:inputNumber
+                  readonly="true"
+                  id="velocidadCapacidad"
+                  value="#{geometriaAutopistas.velocidadCapacidad}"
+                ></p:inputNumber>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p:fieldset>
+    </h:form>
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <h:form id="prueba">
+        <p:commandButton
+          value="Ver tabla de variales"
+          onclick="PF('dlgTablas').show();"
+          style="
+            width: 240px;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-right: 15px;
+          "
+          update="tabla1 tabla2 tabla3 tabla4 tabla5 tabla6 tabla7 tabla8 tabla11 tabla12 tabla13 tabla14 tabla15 tabla16 tabla17 tabla18 tabla19 tabla20 tabla21 tabla22 tabla23 tabla24 tabla24 tabla27 tabla28 tabla29 tabla30 tabla32 "
+        ></p:commandButton>
+        <p:dialog
+          header="Autopistas y autovías - Geometría de la vía - HCM 2016"
+          widgetVar="dlgTablas"
+          modal="true"
+          width="90%"
+          height="90%"
+        >
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; flex-direction: row">
+              <table
+                style="text-align: center; text-align: center; width: 50%"
+                class="tablaDatos"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Nivel de servicio</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.nivelServicio}"
+                        id="tabla8"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD para usar como IMH</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.imdPorcentaje}"
+                        id="tabla1"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD (por sentido de circulación)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.imd}"
+                        id="tabla2"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad horaria por sentido de circulación</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.intensidad}"
+                        id="tabla3"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>FHP (Factor Hora Punta)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.fhp}"
+                        id="tabla4"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>VLB (Velocidad Libre Básica) de la vía (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.vlb}"
+                        id="tabla6"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ajuste por conductores no habituales</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.conductoresNoHabituales}"
+                        id="tabla7"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (camiones y autobuses)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.pesadosCamiones}"
+                        id="tabla11"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (vehículos de recreo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.pesadosRecreo}"
+                        id="tabla12"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipo de terreno</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.tipoTerreno}"
+                        id="tabla13"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Cálculo específico rampa/pendiente</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.especifico}"
+                        id="tabla14"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% rampa (ascendente)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.rampa}"
+                        id="tabla15"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pendiente (descendente)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.pendiente}"
+                        id="tabla16"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Longitud de la rampa/pendiente (km)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.longitud}"
+                        id="tabla5"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Longitud de la rampa/pendiente (km)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.longitud}"
+                        id="tabla18"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad media de recorrido (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.velocidadMedia}"
+                        id="tabla17"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad (Veh./hora/carril)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.capacidadCarril}"
+                        id="tabla19"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad sentido (Veh./hora/sentido)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.capacidadSentido}"
+                        id="tabla20"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Densidad en capacidad (Veh./km/carril)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.densidadCapacidad}"
+                        id="tabla21"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad en capacidad (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.velocidadCapacidad}"
+                        id="tabla22"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de agotamiento</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.porcAgotamiento}"
+                        id="tabla23"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% sobre capacidad</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.porcentajeSobreCapacidad}"
+                        id="tabla24"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table
+                style="
+                  text-align: center;
+                  width: 50%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaVariables"
+              >
+                <thead>
+                  <th>Variable intermedia de los calculos</th>
+                  <th>Valor</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Factor Equivalencia - Vehículos pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.factorEquivalenciaVehPesados}"
+                        id="tabla27"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Equivalencia - Vehículos recreo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.factorEquivalenciaVehRecreo}"
+                        id="tabla28"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad 15min Puntuales - Carril</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.intensidad15MinPuntaCarril }"
+                        id="tabla29"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ajuste de vehículos Pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.ajusteVehiculosPesados }"
+                        id="tabla30"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad límite</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{geometriaAutopistas.intensidadLimite}"
+                        id="tabla32"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+          </div>
+        </p:dialog>
+        <!-- <p:commandButton
+          value="Informe"
+          onclick="PF('dlg2').show();"
+          style="width: 240px; margin-bottom: 10px; margin-top: 15px"
+          update="panelInforme"
+        ></p:commandButton> -->
+        <p:dialog
+          header="Crear informe"
+          widgetVar="dlg2"
+          modal="true"
+          width="386"
+        >
+          <div style="display: flex; flex-direction: column">
+            <h:outputLabel value="Descripción del informe" />
+            <br />
+            <p:inputTextarea
+              value="#{geometriaAutopistas.decripcion}"
+            ></p:inputTextarea>
+            <br />
+            <p:commandButton
+              value="Abrir en Nueva Pestaña"
+              action="#{geometriaAutopistas.generarInforme()}"
+              ajax="true"
+              id="panelInforme"
+            />
+          </div>
+        </p:dialog>
+      </h:form>
+    </div>
+    <script src="javascript/NivelServicio.js"></script>
+  </h:body>
+</html>

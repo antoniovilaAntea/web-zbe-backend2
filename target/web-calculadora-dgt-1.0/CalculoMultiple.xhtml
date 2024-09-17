@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+    url('Resources/img/backSinLogo.jpeg');
+    background-size: cover;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+    "
+
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+        <title>Calculo múltiple - Nivel de servicio</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="./css/predet.css" /> 
+        <style>
+            .titulo {
+                display: flex;
+                align-content: center;
+                align-items: center;
+                justify-content: center;
+                margin-top: 0px;
+            }
+            h1 {
+                color: #eee;
+            }
+
+            form {
+                display: flex;
+                grid-template-columns: 1fr 1fr;
+                grid-column-gap: 25px;
+                justify-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+
+            .ui-panel-content {
+                border: none !important;
+                background: transparent !important;
+            }
+
+            .ui-menubutton {
+                padding-top: 75px;
+                padding-bottom: 250px;
+            }
+
+
+
+            #footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                display: flex;
+                z-index: 10;
+                flex-direction: row;
+                align-items: center;
+                background-color: rgba(0, 122, 217, 0.8);
+                color: #eee;
+                width: 100%;
+                height: 75px;
+            }
+
+            #footer img {
+                height: 60px;
+                width: 120px;
+                position: absolute;
+                left: 90px;
+            }
+
+            #footer ul {
+                list-style: none;
+                display: flex;
+                flex-direction: row;
+                position: absolute;
+                right: 90px;
+            }
+            #footer ul li a {
+                margin-right: 20px;
+                color: #eee !important ;
+            }
+
+            .botones {
+                width: 100%;
+                height: 100%;
+            }
+
+            table {
+                width: 100%;
+                height: 100%;
+            }
+            th,
+            .th {
+                font-weight: bold;
+            }
+            th,
+            td {
+                border: 1px solid #eee;
+                padding: 0.2em;
+                text-align: center;
+                input{
+                    text-align: center;
+                }
+                .ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all {
+                    width: 10em;
+                    background-color: transparent;
+                    border-color: #ddd;
+                    border-width: 2px;
+                    width: 150px;
+
+                }
+            }
+
+
+            .ui-datatable .ui-datatable-data>tr.ui-state-highlight{
+                background-color: #fff !important;
+            }
+            .hidden {
+                display: none;
+            }
+            #editableTable {
+                color: white;
+                border: 1px;
+                border-spacing: 2px;
+                border-color: #fff !important;
+                input {
+                    color: #eee;
+                    text-align: center;
+                }
+            }
+            .details {
+                width: 25px !important;
+                td{
+                    border-color: transparent !important
+
+                }
+            }
+            .results {
+                width: 10em;
+            }
+
+            .botonDetalles {
+                width: 10em !important;
+                background-color: transparent !important;
+                border-color: #66ccff !important;
+                border-width: 2px !important;
+                color: #eee !important;
+                border-radius: 5px !important;
+                cursor: pointer !important;
+                border: 1px solid #eee !important;
+
+            }
+            .botonCalcular {
+                margin-top: 5em;
+                margin-bottom: 8em;
+                display: flex;
+                justify-content: center;
+                button {
+                    width: 15em;
+                    background-color: #116fbf;
+                    height: 3em;
+                    border-radius: 10px;
+                    text-align: center;
+                    align-content: center;
+                    flex-direction: row;
+                    align-items: center;
+                    color: #eee;
+                    border: 1px solid #eee;
+                    cursor: pointer;
+                    margin-right: 2em;
+                    margin-left: 2em;
+                }
+                button:active {
+                    background-color: #3399ff;
+                    height: 3em;
+                    border-radius: 10px;
+                    text-align: center;
+                    align-content: center;
+                    flex-direction: row;
+                    align-items: center;
+                    color: #eee;
+                    border: 2px solid #aaa;
+                    cursor: pointer;
+                }
+            }
+            .ui-fileupload-simple.ui-widget{
+                width: 15em;
+                background-color: #116fbf;
+                height: 3em;
+                border-radius: 10px;
+                text-align: center;
+                align-content: center;
+                flex-direction: row;
+                align-items: center;
+                color: #eee;
+                border: 1px solid #eee;
+                cursor: pointer;
+                margin-right: 2em;
+                margin-left: 2em;
+                display: flex;
+                justify-content: center;
+                cursor: pointer;
+                span {
+                    background-color: #116fbf;
+                    box-shadow: 0;
+                    border: 0;
+
+                }
+                .ui-fileupload-filename{
+                    display: none;
+                }
+            }
+
+            .anadir{
+                margin-top: 2em;
+                display: flex;
+                justify-content: center;
+                button{
+                    border-radius: 94%;
+                    display: flex;
+                    align-content: center;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+            .readonly{
+                border: none !important;
+                .ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all.ui-state-filled.ui-state-focus{
+                    border: none;
+                    border-color: transparent;
+                }
+                input{
+                    border: none;
+                    border-color: transparent;
+                    cursor: default;
+                    .ui-state-focus{
+                        border:none;
+                    }
+                }
+            }
+            body .ui-datatable .ui-datatable-data>tr.ui-state-highlight .ui-row-toggler {
+                color: #333;
+            }
+            .file-select {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+                width: 15em;
+                margin-left: 2em;
+            }
+
+            .file-select::before {
+                background-color: #116fbf;
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 10px;
+                content: 'Importar datos';
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                cursor: pointer;
+                border: 1px solid #eee;
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+
+            }
+
+            .file-select input[type="file"] {
+                opacity: 0;
+                width: 100%;
+                height: 100%;
+                display: inline-block;
+                cursor: pointer;
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+            }
+            .file-select:hover::before {
+                border: 1px solid #116fbf
+            }
+
+            #src-file1::before {
+                content: 'Seleccionar Archivo 1';
+                cursor: pointer
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div class="titulo">
+            <h1>Calculo múltiple de niveles de servicio - Metodología HCM 2016</h1>
+        </div>
+        <h:form id="form" enctype="multipart/form-data" >
+            <p:growl escape="false" id="growl" showDetail="true" />
+            <div>
+                <p:dataTable id="editableTable" var="row" value="#{calculoMultiple.rows}" rowIndexVar="index" rowKey="#{row}" editable="true" selection="#{calculoMultiple.rowSelected}" selectionMode="single"  >
+                    <p:column headerText="Nombre de carretera">
+                        <p:inputText value="#{row.nombre}"></p:inputText>
+                    </p:column>
+                    <p:column headerText="Tipo de carretera">
+                        <p:selectOneMenu id="carretera" value="#{row.carretera}">
+                            <f:selectItem itemLabel="Convencional" itemValue="Convencional" />
+                            <f:selectItem itemLabel="Autopista" itemValue="Autopista" />
+                            <f:selectItem itemLabel="Otras vías" itemValue="Otras" />
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Tipo de terreno">
+                        <p:selectOneMenu id="terreno" value="#{row.terreno}">
+                            <f:selectItem itemLabel="Llano" itemValue="Llano" />
+                            <f:selectItem itemLabel="Ondulado" itemValue="Ondulado" />
+                            <f:selectItem itemLabel="Accidentado" itemValue="Accidentado" />
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column exportHeaderValue="IMD" headerText="IMD">
+                        <p:inputNumber decimalPlaces="2" value="#{row.imd}" />
+                    </p:column>
+                    <p:column exportHeaderValue="Velocidad Media" headerText="Velocidad Media">
+                        <p:inputNumber decimalPlaces="2" id="velocidadMedia" value="#{row.velocidadMedia}" />
+                    </p:column>
+                    <p:column exportHeaderValue="Intensidad horaria" headerText="Intensidad horaria">
+                        <p:inputNumber decimalPlaces="2" id="repartoSentidos" tabindex="-1" class="readonly" value="#{row.repartoSentidos}" readonly="true" />
+                    </p:column>
+                    <p:column exportHeaderValue="% sin adelantar" headerText="% sin adelantar">
+                        <p:inputNumber decimalPlaces="2" id="porcSinAdelantar" value="#{row.porcSinAdelantar}" />
+                    </p:column>
+                    <p:column exportHeaderValue="FHP" headerText="FHP" >
+                        <p:inputNumber decimalPlaces="2" id="fhp" value="#{row.fhp}" />
+                    </p:column>
+                    <p:column exportHeaderValue="% vehículos pesados" headerText="% vehículos pesados">
+                        <p:inputNumber decimalPlaces="2" id="vehPesados" value="#{row.porcVehiculosPesados}" />
+                    </p:column>
+                    <p:column exportHeaderValue="PTSBD" exportable="true" visible="false"><p:inputNumber value="#{row.ptsbd}"/></p:column>
+                    <p:column exportHeaderValue="PTSD" exportable="true" visible="false"  ><p:inputNumber value="#{row.ptsd}"/></p:column>
+                    <p:column exportHeaderValue="Nivel de servicio" headerText="Nivel de servicio">
+                        <p:inputText  id="nivServ" class="readonly" tabindex="-1" value="#{row.nivelServicio}" readonly="true"  />
+                    </p:column>
+                    <p:column exportable="false" headerText="Mas resultados">
+                        <p:rowToggler/>
+                    </p:column>
+
+                    <p:rowExpansion >
+                        <div>
+                            <table>
+                                <tbody>
+                                    <tr class="details">
+                                        <td class="th">IEQD<sub>pts</sub></td>
+                                        <td > <p:inputNumber id="IEQD" value="#{row.ieqdpts}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1" /></td>
+                                        <td class="th">FID<sub>pts</sub></td>
+                                        <td > <p:inputNumber id="FID" value="#{row.fidpts}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1" /></td>
+                                        <td class="th">FVPO<sub>pts</sub></td>
+                                        <td ><p:inputNumber id="FVPO" value="#{row.fvpopts}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1" /></td>
+                                        <td class="th">e<sup>a</sup>*IEQD<sub>pts</sub><sup>b</sup></td>
+                                        <td ><p:inputNumber id="formula" value="#{row.eaieqdptsb}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/></td>
+                                    </tr>
+                                    <tr class="details ">
+                                        <td class="th">IEQO<sub>pts</sub></td>
+                                        <td><p:inputNumber id="IEQO" value="#{row.ieqopts}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/></td>
+                                        <td class="th">FVPD<sub>pts</sub></td>
+                                        <td><p:inputNumber id="FVPD" value="#{row.fvpdpts}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/></td>
+                                        <td class="th">Et</td>
+                                        <td> <p:inputNumber id="Et" value="#{row.et}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/> </td>
+                                        <td class="th">PTSBd</td>
+                                        <td><p:inputNumber id="PTSBd" value="#{row.ptsbd}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/> </td>
+                                        <td class="th">VM (mi/h)</td>
+                                        <td> <p:inputNumber id="VM" value="#{row.vm}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/> </td>
+                                    </tr>
+                                    <tr class="details ">
+                                        <td class="th">FPA<sub>pts</sub></td>
+                                        <td><p:inputNumber id="FPA" value="#{row.fpapts}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/></td>
+                                        <td class="th">FIO<sub>pts</sub></td>
+                                        <td><p:inputNumber id="FIO" value="#{row.fiopts}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/></td>
+                                        <td class="th">Er</td>
+                                        <td><p:inputNumber id="Er" value="#{row.er}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/></td>
+                                        <td class="th">PTSd</td>
+                                        <td><p:inputNumber id="PTSd" value="#{row.ptsd}" decimalPlaces="5" readonly="true" class="readonly" tabindex="-1"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </p:rowExpansion>
+                </p:dataTable>
+                <p:contextMenu for="form:editableTable">
+                    <p:menuitem value="Delete" update="form:editableTable" action="#{calculoMultiple.deleteRow(calculoMultiple.rowSelected)}"></p:menuitem>
+                </p:contextMenu>
+            </div>
+            <p:commandButton value="Añadir nueva fila" update="form:editableTable" action="#{calculoMultiple.addRows()}" />
+            <div class="botonCalcular">
+                <p:commandButton value="Calcular" action="#{calculoMultiple.calculate()}" update="form:editableTable  "/>
+
+                <p:commandButton value="Exportar a Excel" >
+                    <p:dataExporter type="xlsxstream" target="form:editableTable" fileName="TablaCalculoMultiple" options="#{customExportData.excelOpt}" />
+                </p:commandButton>
+                <div class="file-select" >
+                    <h:inputFile  value="#{calculoMultiple.excel}" id="fileInput">
+                        <f:ajax event="change" listener="#{calculoMultiple.addData()}" execute="@this" render="growl form:editableTable" />
+                    </h:inputFile>
+                </div>
+            </div>
+        </h:form>
+        <div id="footer">
+            <img src="Resources/img/logo-antea.com" />
+            <a href="./" style="right:50%; left:50%; position: absolute; font-style: normal; text-decoration: none; margin-right: 20px;color: #eee !important; display: flex; flex-direction:column; align-items: center "><i class="pi pi-home"></i>Inicio</a>
+
+            <ul>
+                <li>
+                    <a
+                        href="Ayuda.xhtml"
+                        style="font-style: normal; text-decoration: none"
+                        >Ayuda</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="Acercade.xhtml"
+                        style="font-style: normal; text-decoration: none"
+                        >Acerca de...</a
+                    >
+                </li>
+            </ul>
+        </div>
+        <script src="javascript/CalculoMultiple.js"></script>
+    </h:body>
+</html>

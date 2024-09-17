@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaOtrasI" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="515" leftMargin="50" rightMargin="30" topMargin="20" bottomMargin="10" uuid="06179423-6df9-4720-9bf0-a35f5bdbb9eb">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<parameter name="REPORT_logo" class="java.net.URL" isForPrompting="false"/>
+	<parameter name="REPORT_proyecto" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REPORT_metodologia" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REPORT_caso" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REPORT_calculo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="REPORT_tipo_calculo" class="java.lang.String" isForPrompting="false"/>
+	<field name="intensidadHoraMaxPorCarril" class="java.lang.String"/>
+	<field name="intensidadHoraMaxPorCalzada" class="java.lang.String"/>
+	<field name="fph" class="java.lang.String"/>
+	<field name="velocidadMedidaCampo" class="java.lang.String"/>
+	<field name="vlb" class="java.lang.String"/>
+	<field name="numCarrilesPorCalzada" class="java.lang.String"/>
+	<field name="anchuraCarril" class="java.lang.String"/>
+	<field name="obstaculoDerecha" class="java.lang.String"/>
+	<field name="enlacesPorKm" class="java.lang.String"/>
+	<field name="ajusteCondNoHabituales" class="java.lang.String"/>
+	<field name="porcPesados" class="java.lang.String"/>
+	<field name="porcRecreo" class="java.lang.String"/>
+	<field name="tipoTerreno" class="java.lang.String"/>
+	<field name="calculoEspecificoRampaPendiente" class="java.lang.Boolean"/>
+	<field name="porcRampa" class="java.lang.String"/>
+	<field name="porcPendiente" class="java.lang.String"/>
+	<field name="longRampaPendiente" class="java.lang.String"/>
+	<field name="intensidadEquivalente" class="java.lang.String"/>
+	<field name="velocidadMediaRecorrido" class="java.lang.String"/>
+	<field name="capacidad" class="java.lang.String"/>
+	<field name="densidadEnCapacidad" class="java.lang.String"/>
+	<field name="velocidadEnCapacidad" class="java.lang.String"/>
+	<field name="nivelDeServicio" class="java.lang.String"/>
+	<field name="tipoMediana" class="java.lang.String"/>
+	<field name="capacidadSentido" class="java.lang.String"/>
+	<field name="imd" class="java.lang.String"/>
+	<field name="imdPorcentaje" class="java.lang.String"/>
+	<field name="porcentajeAgotamiento" class="java.lang.String"/>
+	<field name="porcentajeCapacidad" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="88" splitType="Stretch">
+			<textField textAdjust="StretchHeight" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="11" y="54" width="490" height="30" uuid="5b7c417d-ecb1-458f-a61a-7e95195e8f8c"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{REPORT_proyecto}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape">
+				<reportElement key="image-1" x="2" y="6" width="289" height="33" uuid="96738c33-cf71-4258-b132-bc9152d89adb"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<imageExpression><![CDATA[$P{REPORT_logo}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement key="line-2" x="2" y="45" width="500" height="1" uuid="61aed7c7-d10a-4027-aabb-ce2b1500a597"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="710" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-1" x="11" y="66" width="164" height="22" uuid="1a7ce533-39f3-486d-9f6b-7eaf7623a37e"/>
+				<textElement>
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DATOS DE ENTRADA]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="92" width="66" height="16" uuid="9d5e1e07-bf86-4bf7-bf89-f2481dddc90a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nivelDeServicio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="134" width="66" height="16" uuid="c84f183d-47dc-4753-be98-a031c9d1bd93"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fph}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="154" width="66" height="16" uuid="aeca2ba8-2ccf-491d-8439-819e73c7d49c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{velocidadMedidaCampo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="174" width="66" height="16" uuid="16915ce5-4ad7-442b-b404-f9e4b1d8d0fe"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{vlb}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="194" width="66" height="16" uuid="d1cbd29e-8215-43f3-8698-b491a795ec5e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{numCarrilesPorCalzada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="215" width="66" height="16" uuid="f4846ec1-85e0-43d4-8657-1fbcfceefc29"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{anchuraCarril}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="236" width="66" height="16" uuid="08aefd7c-bb72-4b67-ba0a-2a445731264d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{obstaculoDerecha}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="257" width="66" height="16" uuid="7c304e69-60c8-4fc1-b73a-fd49141dc0ee"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{enlacesPorKm}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="303" width="66" height="16" uuid="af8a3e6b-5cb2-4338-bdf7-bbc15b189893"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ajusteCondNoHabituales}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="324" width="66" height="16" uuid="01eb456b-f8ad-4c7c-9419-914d23491694"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{porcPesados}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="346" width="66" height="16" uuid="a771e7a5-2642-48de-a9c8-401e5e4e5d3b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{porcRecreo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="368" width="66" height="16" uuid="105feea3-237b-46eb-ae01-6eb7d72d0912"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tipoTerreno}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="390" width="66" height="16" uuid="9f6d72d2-a499-4053-a688-905dd03a040a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[( $F{calculoEspecificoRampaPendiente}.booleanValue() ? "Si" : "No" )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="412" width="66" height="16" uuid="f20aa8ff-d57f-461f-bb18-e1d0a608cb47"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{porcRampa}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="434" width="66" height="16" uuid="c463b7e2-8078-452b-ba2d-bace14498e7f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{porcPendiente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="456" width="66" height="16" uuid="f0a5240c-7769-4082-8d0a-6e4324d4e23d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{longRampaPendiente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="524" width="66" height="16" uuid="ff3eb2bb-75c8-47c6-8a53-23cf3fa1c428"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{intensidadEquivalente}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="546" width="66" height="16" uuid="cdbe6700-e779-4099-84c5-91a14671cfa1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{velocidadMediaRecorrido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="568" width="66" height="16" uuid="4ae1a4b5-af84-4d5a-ba17-415f40c35ed9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{capacidad}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="610" width="66" height="16" uuid="e12a37f7-32f8-4df8-880a-964dd752b203"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{densidadEnCapacidad}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="238" y="632" width="66" height="16" uuid="bc3368c3-9e34-458e-9df6-9c7319b1eae0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{velocidadEnCapacidad}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="10" y="673" width="472" height="16" uuid="c20c78ad-0e0b-4f1c-bb7a-a3746a4e77be"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INTENSIDAD HORARIA MÁXIMA POR CARRIL: " + $F{intensidadHoraMaxPorCarril}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="11" y="92" width="218" height="16" uuid="332bb81f-20a5-4174-ad27-e97c304350c9"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nivel de servicio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="11" y="134" width="218" height="16" uuid="e3e0cbf9-1e41-4cd1-9445-c7da968dda4f"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[FHP (Factor Hora Punta):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="11" y="154" width="218" height="16" uuid="7a1b4d4b-2a77-4eda-a66b-c51caf6ca7ac"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Velocidad medida en campo (km/h):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" x="11" y="174" width="218" height="16" uuid="90d82e3f-8f90-410b-a4df-6b7ead5b2f95"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[VLB (Velocidad Libre Básica) de la vía (km/h):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" x="11" y="194" width="218" height="16" uuid="7c234dfa-9fbc-4f54-9e01-cf3e0bd748c1"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número de carriles por calzada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" x="11" y="215" width="218" height="16" uuid="ee5fcd87-7aac-4998-b81e-61cdca529610"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Anchura de carril (m.):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="11" y="236" width="218" height="16" uuid="b7945e4f-5911-4106-99f5-7152530e6617"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Obstáculo a la derecha (m.):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="11" y="257" width="218" height="16" uuid="69d4c636-d6c0-4e5b-bac3-18102b886d8f"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Enlaces por km.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="11" y="303" width="218" height="16" uuid="8e4473a4-781b-48c5-a562-1e6a3dbd76dc"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Ajuste por conductores no habituales:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-11" x="11" y="324" width="218" height="16" uuid="463b5649-d4de-41ed-96cc-daf78e3fd063"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[% pesados (camiones y autobuses):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-12" x="11" y="346" width="218" height="16" uuid="c21fcf18-ff77-42c1-81f7-82ed60e2ba99"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[% pesados (vehículos de recreo):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" x="11" y="368" width="218" height="16" uuid="429335e5-d0df-4aff-80b5-b88084e17cd3"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tipo de terreno:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-14" x="11" y="390" width="218" height="16" uuid="ce1a478a-28a2-4a3a-96cc-5da018c7100d"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Cálculo específico rampa/pendiente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="11" y="412" width="218" height="16" uuid="eb71be2e-70ad-455b-b87e-4e59b225ba00"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[% Rampa (ascendente):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-16" x="11" y="434" width="218" height="16" uuid="a82b6ce9-e879-4baf-ae89-f9ce87efb382"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[% Pendiente (descendente):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-17" x="11" y="456" width="218" height="16" uuid="a3c2fe99-1f54-4994-aa9e-37fbbfc7b650"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Longitud de la rampa/pendiente (km):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-18" x="10" y="477" width="164" height="22" uuid="0a3229c3-df5f-4973-883f-df4f5828d608"/>
+				<textElement>
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[RESULTADOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-19" x="10" y="524" width="218" height="16" uuid="c4fc15ef-3b77-4b1f-af25-24de39e7bf46"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Intensidad (Veh. equiv./hora/carril):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-20" x="10" y="546" width="218" height="16" uuid="0f09a8f0-bfeb-4251-baee-d02bad7b141c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Velocidad media de recorrido (km/h):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-21" x="10" y="568" width="218" height="16" uuid="2c0ae1a5-a6cf-42c3-a1b3-2a9e4790b9d3"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Capacidad (Veh./hora/carril):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-22" x="10" y="610" width="218" height="16" uuid="f66aec9a-4f3a-47c5-bbdf-8e3d9a0ec3ec"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Densidad en capacidad (Veh./km/carril):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-23" x="10" y="632" width="218" height="16" uuid="123878fa-58f1-447f-a2f5-6f16038cf4da"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Velocidad en capacidad (km/h):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-24" x="10" y="5" width="91" height="16" uuid="955e2282-3a4d-4ef5-a086-cd0451b90c4e"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[METODOLOGÍA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-25" x="10" y="23" width="91" height="16" uuid="e9420c8a-6799-4c05-92b3-52cb1385986d"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CASO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-26" x="10" y="41" width="91" height="16" uuid="e620ac7f-af78-439f-84be-eb02f0188fbc"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CÁLCULO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-4" x="104" y="5" width="391" height="16" uuid="9fd6d304-c9ab-46f5-a3b5-5fde5a97a0ab"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{REPORT_metodologia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="104" y="23" width="391" height="16" uuid="736f77b0-c4b1-4eca-ad02-5bf164501b20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{REPORT_caso}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-6" x="104" y="41" width="391" height="16" uuid="bf7aa07a-d580-4665-927b-f2724293f79e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{REPORT_calculo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-7" x="10" y="694" width="472" height="16" uuid="fee64a49-6616-4a4d-90cd-4c68cade5145"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INTENSIDAD HORARIA MÁXIMA POR CALZADA: " + $F{intensidadHoraMaxPorCalzada}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-8" x="238" y="280" width="66" height="16" uuid="024542b0-b17a-41a0-8795-1f045d3e637b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tipoMediana}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-27" x="11" y="280" width="218" height="16" uuid="d564864d-d7e0-44fc-98d9-0246276c3076"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tipo de mediana:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-9" x="239" y="113" width="66" height="16" uuid="5ae8d6d0-60f4-4d83-bded-ff715d9e0fe4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{imdPorcentaje}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-28" x="12" y="113" width="218" height="16" uuid="f5060fd3-dd23-4653-806a-356664e0de19"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[% de la IMD para usar como IMH:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-29" x="10" y="589" width="218" height="16" uuid="1c312f85-e53a-4709-a583-3e0673ea929c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Capacidad (Veh./hora/sentido):]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-10" x="238" y="589" width="66" height="16" uuid="7ca376e7-eed8-4c3d-ae80-53adb8bbfca8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{capacidadSentido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-11" x="11" y="653" width="293" height="16" uuid="eddf463f-24d4-4c59-a5de-2ecc37102b47"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{porcentajeCapacidad}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-12" x="238" y="503" width="66" height="16" uuid="c6588451-2386-4ac4-8d7e-5f284f4bb236"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{imd}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-30" x="10" y="503" width="218" height="16" uuid="8845d55c-b47e-4eff-a663-c36b105e20b8"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[IMD (por sentido de circulación):]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="10" splitType="Stretch">
+			<line>
+				<reportElement key="line-1" x="2" y="5" width="500" height="1" uuid="a4703ab0-88e1-4882-a04c-c42f3140ee9f"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

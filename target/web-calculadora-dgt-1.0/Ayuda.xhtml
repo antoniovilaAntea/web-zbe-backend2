@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      style="background-image: linear-gradient(rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.25)), url('Resources/img/background.png');
+      background-size: cover;
+      background-repeat: repeat-y;
+      width: 100%;
+      height: 100%;
+      "
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+        <title>Ayuda</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+            header {
+                color: #EEE;
+                font-size: 30px;
+                display: flex;
+                justify-content: center;
+                padding-top: 40px
+            }
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 0 3px;
+                justify-content: center
+            }
+
+            /* Create 3 columns in each row */
+            .column {
+                flex: 80%;
+                max-width: 50%;
+                padding: 0 3px;
+            }
+
+            .column div img {
+                margin-top: 8px;
+                vertical-align: middle;
+                width: 100%;
+                height: 250px;
+                object-fit: cover;
+                cursor: pointer
+            }
+            .column div img:hover{
+                -o-transition:.5s;
+                -ms-transition:.5s;
+                -moz-transition:.5s;
+                -webkit-transition:.5s;
+                transition:.5s;
+                z-index: 9999;
+                background-color: 10px 10px 5px #888888;
+            }
+            /*The layout will have two columns*/
+            @media screen and (min-width: 1200px) {
+                .column {
+                    flex: 22%;
+                    max-width: 22%;
+                }
+            }
+
+
+            .img {
+                position:relative;
+            }
+            .img img {
+                width:100%;
+                vertical-align:top;
+            }
+            .img:after, .img:before {
+                position:absolute;
+                opacity:0;
+                transition: all 0.5s;
+                -webkit-transition: all 0.5s;
+            }
+            .img:after {
+                content:'\A';
+                width:100%;
+                height:100%;
+                top:0;
+                left:0;
+                background:rgba(0,0,0,0.6);
+            }
+            .img:before {
+                content: attr(data-content);
+                width:100%;
+                color:#fff;
+                z-index:1;
+                bottom:0;
+                padding:4px 10px;
+                text-align:center;
+                background:#007ad9;
+                box-sizing:border-box;
+                -moz-box-sizing:border-box;
+            }
+            .img:hover:after, .img:hover:before {
+                opacity:1;
+                cursor: pointer;
+            }
+
+
+            .logo-img a {
+                display: flex;
+                justify-content: center;
+                height: 100px;
+                padding: 10px
+            }
+
+            .logo-img a img {
+                padding-top: 10px
+            }
+
+            .menu {
+                background-color: #007ad9;
+                top:0;
+                left: 0;
+                width: 300px;
+                height: 100%;
+                position: fixed;
+                z-index: 999
+            }
+
+            .lista {
+                padding-top: 50px;
+                display: flex;
+                justify-content: center;
+
+            }
+
+            .menu li{
+
+                margin-bottom: 10px !important
+            }
+
+            .footer{
+                bottom: 0;
+                position: fixed;
+                padding-bottom: 50px
+            }
+
+            ul {
+                list-style: none;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+
+            }
+
+            ui-menuitem-text ,li{
+                color: #DDD;
+                font-size: 17px;
+                margin-top: 5px;
+                margin-bottom: 15px;
+
+            }
+            .menu li:hover {
+                padding-left: 10px;
+                color: #007ad9;
+                background-color: #DDD;
+                width: 215px !important;
+                cursor: pointer;
+                border-radius: 5px !important;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                margin-top: 0 !important;
+
+            }
+
+            .ui-state-hover{
+                padding-left: 10px !important;
+                width: 215px !important;
+                border-radius: 5px !important;
+                height: 60px;
+                display: flex !important;
+                align-items: center;
+                margin-top: 0 !important;
+            }
+
+            .menu li:hover ul {
+                background-color: #007ad9 !important
+            }
+
+            .ui-menuitem-active>.ui-menuitem-link .ui-icon, .ui-menuitem-active>.ui-menuitem-link .ui-menuitem-text, body .ui-menu .ui-menu-list .ui-menuitem.ui-menuitem-active>.ui-menuitem-link   {
+                color: #007ad9 !important;
+                background-color: transparent !important;
+            }
+
+            .menu:not(:hover){
+                display: none;
+            }
+
+            .hamburguer-menu:active ~ .menu {
+                display: block;
+            }
+
+            .ui-breadcrumb{
+                background: transparent !important;
+                border: none !important;
+                margin-left: 150px;
+                padding-bottom: 0 !important
+
+            }
+
+            .ui-breadcrumb li a{
+                color: #EEE !important;
+            }
+
+            .ui-breadcrumb li a:hover{
+                color: #007ad9 !important;
+            }
+            .ui-breadcrumb li a span{
+                color: #EEE !important;
+                cursor: default;
+
+            }
+            .ui-breadcrumb li:before{
+                color: #EEE !important;
+
+            }
+
+            .ui-breadcrumb-items {
+                display: flex;
+                flex-direction: row;
+                list-style: none;
+
+            }
+
+            .footer ul li a:hover{
+                color: #007ad9 !important;
+            }
+
+            .footer ul li:hover a{
+                color: #007ad9 !important;
+            }
+
+            .footer ul li:not(:hover) a{
+                color:#eee !important;
+            }
+
+            .ui-menu {
+                background: transparent !important;
+                border: none !important;
+            }
+
+            .ui-menuitem-text:hover {
+            }
+
+            .ui-menuitem-text:not(:hover), .ui-icon {
+                color: #DDD !important
+            }
+
+            .ui-divider.ui-divider-horizontal:before{
+                border-top: 5px transparent
+            }
+
+            #myModal{
+                display: none;
+                position: absolute;
+                top: 85px;
+                justify-content: center;
+                width: 93.8%;
+                background-color: rgba(0,0,0,0.5);
+                flex-direction: row;
+                right: 40px;
+                z-index: 999;
+
+            }
+            #close{
+                position: relative;
+                background: red;
+                width: 10px;
+            }
+        </style>
+    </h:head>
+    <body>
+        <header>Ayuda</header>
+        <img class="hamburguer-menu" src="Resources/img/bars-solid.svg" height="30px" style="filter: invert(1); border: none; margin-left: 50px; cursor: pointer" />
+
+
+        <h:form style="margin-bottom: 15px;">             <p:breadCrumb class="breadcrumb">
+                <p:menuitem value="home" outcome="Inicio"/>
+                <p:menuitem value="Ayuda"/>
+            </p:breadCrumb>
+        </h:form>
+
+        <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+
+        <div class="imagenes">
+            <div class="row">
+                <div class="column">
+                    <div class="img" data-content="Autopistas y autovías">
+                        <img id="autopistas" src="Resources/ayuda/autopistas.jpg" />
+                    </div>
+                    <div class="img" data-content="Nivel de servicio cualitativo">
+                        <img id="servicio" src="Resources/ayuda/nivelServCualitativo.jpg" />
+                    </div>
+
+                </div>
+
+                <div class="column">
+                    <div class="img" data-content="Conceptos dimensionamiento carreteras">
+                        <img id="conceptos" src="Resources/ayuda/conceptosdimcarr.jpg" />
+                    </div>
+                    <div class="img" data-content="Glorietas interurbanas">
+                        <img id="glorietas" src="Resources/ayuda/glorietas.jpg" />
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="img" data-content="Carreteras convencionales">
+                        <img id="convencionales" src="Resources/ayuda/convencionales.jpg" />
+                    </div>
+                    <div class="img" data-content="Ramales de entrada y salida">
+                        <img id="ramal" src="Resources/ayuda/ramal.jpg" />
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="img" data-content="Otras vías con calzadas separadas">
+                        <img id="calzadas" src="Resources/ayuda/calzadasSeparadas.jpg" />
+                    </div>
+                    <div class="img" data-content="Tramos de trenzado">
+                        <img id="trenzado" src="Resources/ayuda/trenzado.jpg" />
+                    </div>
+                </div>
+            </div>
+            <div id="myModal" class="modal">
+                <span class="close" onclick="closeModal()" style=" background: #007ad9;
+                      color: #EEE;
+                      width: 30px;
+                      height: 30px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      position: inherit;
+                      top: 0;
+                      left: 0;
+                      font-size: 22px;
+                      cursor:pointer;">&times;</span>
+
+                <img class="modal-content" id="modal-image" />
+            </div>
+
+        </div>
+
+        <script src="javascript/Ayuda.js"></script>
+    </body>
+</html>

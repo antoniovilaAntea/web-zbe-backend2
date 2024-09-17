@@ -1,0 +1,1136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+      url('Resources/img/background.png');
+    background-size: cover;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+  "
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+  <h:head>
+    <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+    <title>Nivel de servicio - Otras vías con calzadas separadas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/predet.css" />
+    <style>
+      .intensidad {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .velocidad {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .geometria {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .varios {
+        grid-column: 2;
+        grid-row: 2/4;
+      }
+      .adicionales {
+        grid-column: 1;
+        grid-row: 3;
+      }
+      .adicionales .ui-fieldset-content input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .nivel_servicio {
+        grid-column: 1/3;
+        grid-row: 4;
+      }
+      .nivel_servicio .input {
+        margin-bottom: 0;
+      }
+      .nivel_servicio .ui-fieldset-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .nivel_servicio .ui-fieldset-content .servicio_input #form:resultado {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .nivel_servicio .ui-fieldset-content input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+
+      .servicio_input {
+        width: 350px;
+        display: flex;
+        flex-direction: column;
+      }
+      .capacidad_inputs input,
+      .servicio_input input {
+        margin-bottom: 3px;
+      }
+      .capacidad_inputs {
+        margin-right: 8px;
+        margin-left: 100px;
+      }
+      .capacidad_VhCS label {
+        margin-right: 8px;
+      }
+
+      .capacidad_VhCS .capacidad_input div label {
+        margin-left: 8px;
+      }
+      .tablaDatos tbody tr td,
+      .tablaVariables tbody tr td {
+        padding: 0.15em;
+        text-align: center;
+
+        label {
+          color: #007ad8;
+        }
+      }
+      .tablaDatos thead,
+      .tablaVariables thead {
+        border-bottom: 1px #007ad8 dotted;
+        background-color: #0071d8;
+        color: #f7f7f7;
+      }
+    </style>
+  </h:head>
+
+  <h:body>
+    <header>Nivel de servicio</header>
+    <img
+      class="hamburguer-menu"
+      src="Resources/img/bars-solid.svg"
+      height="30px"
+      style="
+        filter: invert(1);
+        border: none;
+        margin-left: 50px;
+        cursor: pointer;
+      "
+    />
+
+    <h:form style="margin-bottom: 15px">
+      <p:breadCrumb class="breadcrumb">
+        <p:menuitem class="home" value="home" outcome="Inicio" />
+        <p:menuitem value="Otras vías con calzadas separadas" />
+        <p:menuitem value="Nivel de servicio" />
+      </p:breadCrumb>
+    </h:form>
+
+    <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+    <h:form class="formulario" id="form">
+      <p:growl escape="false" id="growl" showDetail="true" />
+
+      <p:fieldset
+        class="intensidad"
+        legend="Intensidad y FHP"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D (por sentido de circulación)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imdPorcentaje"
+              onchange="disableInputIntensidad()"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+              value="#{nivelServOtrasVias.imdPorcentaje}"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imd"
+              onchange="disableInputIntensidad()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              value="#{nivelServOtrasVias.imd}"
+              disabled="false"
+            ></p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad horario por sentido de circulación"
+          />
+          <p:inputNumber
+            onchange="disableInputImd()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServOtrasVias.intensidad}"
+            id="intensidadInput"
+            class="input-intensidad"
+            disabled="false"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="F.H.P (Factor Hora Punta)" />
+          <p:inputNumber
+            value="#{nivelServOtrasVias.fhp}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="velocidad"
+        legend="Velocidad"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Velocidad medida en campo (km/h)"
+          ></p:outputLabel>
+          <p:inputNumber
+            onchange="disableInputVelocidadOtras()"
+            value="#{nivelServOtrasVias.velocidadMedida}"
+            id="velocidad_medida"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          >
+          </p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="V.L.B (Velocidad Libre Básica) de la vía (km/h)"
+          />
+          <p:inputNumber
+            onchange="disableInputVelocidadOtras()"
+            id="vlb"
+            value="#{nivelServOtrasVias.vlb}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="geometria"
+        legend="Geometría de la vía"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Número de carriles por calzada"></p:outputLabel>
+          <p:selectOneMenu
+            id="carriles"
+            value="#{nivelServOtrasVias.numCarriles}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="2" itemValue="2" />
+            <f:selectItem itemLabel="3" itemValue="3" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Anchura del carril(m.)" />
+          <p:selectOneMenu
+            widgetVar="anchura"
+            id="anchura"
+            value="#{nivelServOtrasVias.anchuraCarril}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="3.0" itemValue="3.0" />
+            <f:selectItem itemLabel="3.1" itemValue="3.1" />
+            <f:selectItem itemLabel="3.2" itemValue="3.2" />
+            <f:selectItem itemLabel="3.3" itemValue="3.3" />
+            <f:selectItem itemLabel="3.4" itemValue="3.4" />
+            <f:selectItem itemLabel="3.5" itemValue="3.5" />
+            <f:selectItem itemLabel="3.6" itemValue="3.6" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 3.0 HASTA 3.6  -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Obstáculo a ambos lados (m.)" />
+          <p:selectOneMenu
+            widgetVar="obstaculos"
+            id="obstaculos"
+            value="#{nivelServOtrasVias.obstaculoDerecha}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="0.0" itemValue="0.0" />
+            <f:selectItem itemLabel="0.6" itemValue="0.6" />
+            <f:selectItem itemLabel="1.2" itemValue="1.2" />
+            <f:selectItem itemLabel="1.8" itemValue="1.8" />
+            <f:selectItem itemLabel="2.4" itemValue="2.4" />
+            <f:selectItem itemLabel="3.0" itemValue="3.0" />
+            <f:selectItem itemLabel="3.6" itemValue="3.6" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO 0.0,0.3,0.6,0.9,1.2,1.5,1.8  -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Tipo de mediana" />
+          <p:selectOneMenu
+            widgetVar="mediana"
+            id="mediana"
+            value="#{nivelServOtrasVias.mediana}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="Con mediana" itemValue="Con mediana" />
+            <f:selectItem itemLabel="Sin mediana" itemValue="Sin mediana" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 0.3 HASTA 1.2  -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Número de accesos (por km.)" />
+          <p:selectOneMenu
+            widgetVar="accesos"
+            id="accesos"
+            value="#{nivelServOtrasVias.accesos}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="0" itemValue="0" />
+            <f:selectItem itemLabel="6" itemValue="6" />
+            <f:selectItem itemLabel="12" itemValue="12" />
+            <f:selectItem itemLabel="18" itemValue="18" />
+            <f:selectItem itemLabel="24" itemValue="24" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 0.3 HASTA 1.2  -->
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="varios"
+        legend="Ajustes varios"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Ajuste por conductores no habituales"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{nivelServOtrasVias.conductoresNoHabituales}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          >
+          </p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (camiones y autobuses)" />
+          <p:inputNumber
+            value="#{nivelServOtrasVias.pesadosCamiones}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (vehículos de recreo)" />
+          <p:inputNumber
+            value="#{nivelServOtrasVias.pesadosRecreo}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Tipo de terreno" />
+          <p:selectOneMenu
+            id="terreno"
+            value="#{nivelServOtrasVias.tipoTerreno}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="Llano" itemValue="Llano" />
+            <f:selectItem itemLabel="Ondulado" itemValue="Ondulado" />
+            <f:selectItem itemLabel="Accidentado" itemValue="Accidentado" />
+          </p:selectOneMenu>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Cálculo específico rampa/pendiente" />
+          <p:selectOneRadio
+            id="especifico"
+            value="#{nivelServOtrasVias.especifico}"
+            widgetVar="especifico"
+            onchange="especificoRampaSelect()"
+          >
+            <f:selectItem itemLabel="Si" itemValue="Si" />
+            <f:selectItem itemLabel="No" itemValue="No" />
+          </p:selectOneRadio>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% Rampa (ascendente)" />
+          <p:inputNumber
+            id="rampa"
+            value="#{nivelServOtrasVias.rampa}"
+            onchange="especificoRampa()"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% Pendiente (descendente)" />
+          <p:inputNumber
+            id="pendiente"
+            value="#{nivelServOtrasVias.pendiente}"
+            onchange="especificoRampa()"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Longitud de la rampa/pendiente (km)"
+          ></p:outputLabel>
+          <p:inputNumber id="longitud" value="#{nivelServOtrasVias.longitud}">
+          </p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="adicionales"
+        legend="Velocidad"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad (Veh.equiv./hora/carril)"
+          ></p:outputLabel>
+          <p:inputNumber
+            id="intensidad_medida"
+            readonly="true"
+            value="#{nivelServOtrasVias.intensidadCualquiera}"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Velocidad media de recorrido (km/h)" />
+          <p:inputNumber
+            id="velocidadMedia"
+            readonly="true"
+            symbol="km/h"
+            symbolPosition="s"
+            value="#{nivelServOtrasVias.velocidadMedia}"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="nivel_servicio"
+        legend="Cálculo nivel de servicio"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 95%"
+      >
+        <div
+          class="input"
+          style="display: flex; align-items: center; margin-right: 50px"
+        >
+          <p:commandButton
+            value="Calcular"
+            style="margin-right: 50px; width: 150px; font-size: 22px"
+            action="#{nivelServOtrasVias.calculo()}"
+            update="growl velocidadCapacidad densidadCapacidad capacidadSentido capacidadCarril porcAgotamiento porcSobreCapacidad form:intensidadInput form:intensidad_medida form:velocidadMedia resultado"
+          >
+          </p:commandButton>
+          <div class="servicio_input">
+            <p:inputText
+              readonly="true"
+              id="resultado"
+              value="#{nivelServOtrasVias.resultadoCalculo}"
+            ></p:inputText>
+            <p:progressBar
+              id="porcAgotamiento"
+              value="#{nivelServOtrasVias.porcAgotamiento}"
+              labelTemplate="% de Agotamiento: #{nivelServOtrasVias.porcAgotamiento}%"
+              displayOnly="true"
+              style="height: 24px; display: flex; align-items: center"
+            />
+            <p:progressBar
+              id="porcSobreCapacidad"
+              value="#{nivelServOtrasVias.porcSobreCapacidad}"
+              labelTemplate="% sobre Capacidad: #{nivelServOtrasVias.porcSobreCapacidad}%"
+              displayOnly="true"
+              style="height: 24px; display: flex; align-items: center"
+            />
+          </div>
+        </div>
+        <div
+          class="capacidad_servicio"
+          style="display: flex; flex-direction: column"
+        >
+          <div
+            class="capacidad_VhCS"
+            style="display: flex; flex-direction: row; align-items: center"
+          >
+            <p:outputLabel value="Capacidad" />
+            <div
+              class="capacidad_input"
+              style="display: flex; flex-direction: column"
+            >
+              <div
+                style="display: flex; flex-direction: row; align-items: center"
+              >
+                <p:inputNumber
+                  readonly="true"
+                  value="#{nivelServOtrasVias.capacidadCarril}"
+                  id="capacidadCarril"
+                ></p:inputNumber>
+                <p:outputLabel value="Veh./hora/carril"></p:outputLabel>
+              </div>
+              <div
+                style="display: flex; flex-direction: row; align-items: center"
+              >
+                <p:inputNumber
+                  readonly="true"
+                  value="#{nivelServOtrasVias.capacidadSentido}"
+                  id="capacidadSentido"
+                ></p:inputNumber>
+                <p:outputLabel value="Veh./hora/sentido"></p:outputLabel>
+              </div>
+            </div>
+            <div
+              class="capacidad_inputs"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+              "
+            >
+              <div
+                style="display: flex; flex-direction: row; align-items: center"
+              >
+                <p:outputLabel
+                  value="Densidad en capacidad (Veh./km)"
+                ></p:outputLabel>
+                <p:inputNumber
+                  readonly="true"
+                  value="#{nivelServOtrasVias.densidadCapacidad}"
+                  id="densidadCapacidad"
+                ></p:inputNumber>
+              </div>
+              <div
+                style="display: flex; flex-direction: row; align-items: center"
+              >
+                <p:outputLabel
+                  value="Velocidad en capacidad (km/h)"
+                ></p:outputLabel>
+                <p:inputNumber
+                  readonly="true"
+                  value="#{nivelServOtrasVias.velocidadCapacidad}"
+                  id="velocidadCapacidad"
+                ></p:inputNumber>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p:fieldset>
+    </h:form>
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <h:form id="prueba">
+        <p:commandButton
+          value="Ver tabla de variales"
+          onclick="PF('dlgTablas').show();"
+          style="
+            width: 240px;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-right: 15px;
+          "
+          update="tabla1 tabla2 tabla3 tabla4 tabla5 tabla6 tabla7 tabla8 tabla9 tabla10 tabla11 tabla12 tabla13 tabla14 tabla15 tabla16 tabla17 tabla18 tabla19 tabla20 tabla21 tabla22 tabla23 tabla24 tabla25 tabla26 tabla27 tabla28 tabla29 tabla30 tabla31 tabla34 tabla35 tabla36 tabla37 tabla38 "
+        ></p:commandButton>
+        <p:dialog
+          header="Otras vías con calzadas separadas - Nivel de servicio - HCM 2016"
+          widgetVar="dlgTablas"
+          modal="true"
+          width="90%"
+          height="90%"
+        >
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; flex-direction: row">
+              <table
+                style="text-align: center; text-align: center; width: 50%"
+                class="tablaDatos"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>% de la IMD para usar como IMH</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.imdPorcentaje}"
+                        id="tabla1"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD (sumando ambos sentidos)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.imd}"
+                        id="tabla2"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad horaria máxima por carril</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.intensidad}"
+                        id="tabla3"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>FHP (Factor Hora Punta)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.fhp}"
+                        id="tabla4"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad medida en campo (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.velocidadMedida}"
+                        id="tabla5"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>VLB (Velocidad Libre Básica) de la vía (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.vlb}"
+                        id="tabla6"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nº Carriles</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.numCarriles}"
+                        id="tabla7"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Anchura de carril (m.)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.anchuraCarril}"
+                        id="tabla8"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Obstáculos a ambos lados (m.)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.obstaculoDerecha}"
+                        id="tabla9"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nº de accesos por km</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.accesos}"
+                        id="tabla10"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Tipo de mediana</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.mediana}"
+                        id="tabla11"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ajuste conductores no habituales</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.conductoresNoHabituales}"
+                        id="tabla12"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (camiones y autobuses)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.pesadosCamiones}"
+                        id="tabla13"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (vehículos de recreo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.pesadosRecreo}"
+                        id="tabla14"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipo de terreno</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.tipoTerreno}"
+                        id="tabla15"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% rampa</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.rampa}"
+                        id="tabla16"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pendiente</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.pendiente}"
+                        id="tabla17"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Longitud de la rampa / pendiente (km)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.longitud}"
+                        id="tabla18"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad (Veh.equiv./hora/carril)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.intensidadCualquiera}"
+                        id="tabla19"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad media de recorrido (Km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.velocidadMedia}"
+                        id="tabla20"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% sobre Capacidad</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.porcSobreCapacidad}"
+                        id="tabla21"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de agotamiento</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.porcAgotamiento}"
+                        id="tabla22"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad (Veh./hora/carril)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.capacidadCarril}"
+                        id="tabla23"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad (Veh./hora/sentido)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.capacidadSentido}"
+                        id="tabla24"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Densidad en capacidad (Veh./km)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.densidadCapacidad}"
+                        id="tabla25"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad en capacidad (Km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.velocidadCapacidad}"
+                        id="tabla26"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Nivel de servicio</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.resultadoCalculo}"
+                        id="tabla27"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table
+                style="
+                  text-align: center;
+                  width: 50%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaVariables"
+              >
+                <thead>
+                  <th>Variable intermedia de los calculos</th>
+                  <th>Valor</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Factor Equivalencia - Vehículos Pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.factorEquivalenciaVehPesados}"
+                        id="tabla28"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Equivalencia - Vehículos de Recreo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.factorEquivalenciaVehRecreo}"
+                        id="tabla29"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad - 15min punta / carril</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.intensidad15MinPuntaCarril}"
+                        id="tabla30"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ajuste Vehiculos Pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.ajusteVehiculosPesados}"
+                        id="tabla31"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Corrección - Densidad Capacidad</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.factordensidadCapacidad}"
+                        id="tabla34"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad Capacidad</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.factorvelocidadCapacidad}"
+                        id="tabla35"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad Media</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.factorvelocidadMedia}"
+                        id="tabla36"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Densidad</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.densidad}"
+                        id="tabla37"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad Límite</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServOtrasVias.intensidadLimite}"
+                        id="tabla38"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+          </div>
+        </p:dialog>
+        <!-- <p:commandButton
+          value="Informe"
+          onclick="PF('dlg2').show();"
+          style="width: 240px; margin-bottom: 10px; margin-top: 15px"
+          update="panelInforme"
+        ></p:commandButton> -->
+        <p:dialog
+          header="Crear informe"
+          widgetVar="dlg2"
+          modal="true"
+          width="386"
+        >
+          <div style="display: flex; flex-direction: column">
+            <h:outputLabel value="Descripción del informe" />
+            <br />
+            <p:inputTextarea
+              value="#{nivelServOtrasVias.decripcion}"
+            ></p:inputTextarea>
+            <br />
+            <p:commandButton
+              value="Abrir en Nueva Pestaña"
+              action="#{nivelServOtrasVias.generarInforme()}"
+              ajax="true"
+              id="panelInforme"
+            />
+          </div>
+        </p:dialog>
+      </h:form>
+    </div>
+    <script src="javascript/NivelServicio.js"></script>
+  </h:body>
+</html>

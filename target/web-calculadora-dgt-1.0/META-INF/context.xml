@@ -1,0 +1,24 @@
+
+<Context path="/web-calculadora-dgt">
+    <Resource auth="Container" 
+              characterEncoding="utf8" 
+              characterSetResults="utf8" 
+              connectionCollation="utf8_general_ci" 
+              driverClassName="org.postgresql.Driver" 
+              maxActive="200" 
+              maxIdle="30" 
+              maxWait="10000" 
+              minEvictableIdleTimeMillis="300000" 
+              removeAbandoned="true" 
+              removeAbandonedTimeout="3600" 
+              testOnBorrow="true" 
+              testWhileIdle="true" 
+              timeBetweenEvictionRunsMillis="30000" 
+              name="jdbc/lagosDataSource" 
+              type="javax.sql.DataSource" 
+              url="jdbc:postgresql://192.168.3.5:5432/lagos" 
+              useUnicode="true" 
+              username="asistencia" 
+              password="asistencia" 
+              validationQuery="select testfield from configuracion.test where testfield = 0"/>
+</Context>

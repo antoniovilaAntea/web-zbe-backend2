@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Tabla Interactiva</title>
+</h:head>
+<h:body>
+    <h:form id="form">
+        <p:dataTable id="editableTable" value="#{preubaCalculoMultiple.calculos}" var="calculo" editable="true">
+            <f:facet name="header">
+                Tabla Interactiva
+            </f:facet>
+            <p:column headerText="Tipo de carretera">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.carretera}" /></f:facet>
+                    <f:facet name="input">
+                        <p:selectOneMenu value="#{calculo.carretera}">
+                            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+                            <f:selectItem itemLabel="Convencional" itemValue="Convencional" />
+                            <f:selectItem itemLabel="Autopista" itemValue="Autopista" />
+                            <f:selectItem itemLabel="Otras vías" itemValue="Otras" />
+                        </p:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Tipo de terreno">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.terreno}" /></f:facet>
+                    <f:facet name="input">
+                        <p:selectOneMenu value="#{calculo.terreno}">
+                            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+                            <f:selectItem itemLabel="Llano" itemValue="Llano" />
+                            <f:selectItem itemLabel="Ondulado" itemValue="Ondulado" />
+                            <f:selectItem itemLabel="Accidentado" itemValue="Accidentado" />
+                        </p:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="IMD">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.imd}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{calculo.imd}" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Velocidad media">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.velocidadMedia}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{calculo.velocidadMedia}" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Reparto de sentidos">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.repartoSentidos}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{calculo.repartoSentidos}" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="% sin adelantar">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.porcSinAdelantar}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{calculo.porcSinAdelantar}" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="FHP">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.fhp}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{calculo.fhp}" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="% vehículos pesados">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.porcVehiculosPesados}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputNumber value="#{calculo.porcVehiculosPesados}" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Nivel de servicio">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{calculo.nivelServicio}" /></f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{calculo.nivelServicio}" />
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Mas resultados">
+                <p:commandButton id="detalles" value="Ver Detalles" onclick="toggleDetails(this)" class="botonDetalles"/>
+            </p:column>
+        </p:dataTable>
+        <p:commandButton value="+" id="botonAnadir" action="#{preubaCalculoMultiple.agregarFila}" update="form:editableTable"/>
+        <p:commandButton value="Calcular" action="#{preubaCalculoMultiple.calcularValores()}" update="form:editableTable"/>
+    </h:form>
+</h:body>
+</html>

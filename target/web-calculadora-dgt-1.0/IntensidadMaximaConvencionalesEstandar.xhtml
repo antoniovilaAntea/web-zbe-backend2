@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+      url('Resources/img/background.png');
+    background-size: cover;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+  "
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+  <h:head>
+    <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+    <title>
+      Intensidad máxima - Carreteras convencionales - Analisis estándar
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/predet.css" />
+    <style>
+      .intensidad {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .velocidad {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .geometria {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .varios {
+        grid-column: 2;
+        grid-row: 2/4;
+      }
+      .adicionales {
+        grid-column: 1;
+        grid-row: 4;
+      }
+      .adicionales .ui-fieldset-content input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .nivel_servicio {
+        grid-column: 1/3;
+        grid-row: 5;
+      }
+      .nivel_servicio .input {
+        margin-bottom: 0;
+      }
+      .nivel_servicio .ui-fieldset-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .servicio_input {
+        display: flex;
+        flex-direction: column;
+      }
+      .capacidad_inputs input,
+      .servicio_input input {
+        margin-bottom: 3px;
+      }
+      .capacidad_inputs {
+        margin-right: 8px;
+        margin-left: 100px;
+      }
+      .capacidad_VhCS label {
+        margin-right: 8px;
+      }
+
+      .capacidad_VhCS .capacidad_input div label {
+        margin-left: 8px;
+      }
+      .nivel_servicio input {
+        color: blue !important;
+        font-weight: bold !important;
+        font-size: 15px !important;
+        margin-left: 10px;
+      }
+      .nivel_servicio .porcIMD {
+        color: #333 !important;
+        font-weight: normal !important;
+        width: 212px;
+        margin-left: 10px;
+      }
+      .tablaDatos tbody tr td,
+      .tablaVariables tbody tr td {
+        padding: 0.25em;
+        text-align: center;
+
+        label {
+          color: #007ad8;
+        }
+      }
+      .tablaDatos thead,
+      .tablaVariables thead {
+        border-bottom: 1px #007ad8 dotted;
+        background-color: #0071d8;
+        color: #f7f7f7;
+      }
+    </style>
+  </h:head>
+
+  <h:body>
+    <header>Intensidad máxima</header>
+    <img
+      class="hamburguer-menu"
+      src="Resources/img/bars-solid.svg"
+      height="30px"
+      style="
+        filter: invert(1);
+        border: none;
+        margin-left: 50px;
+        cursor: pointer;
+      "
+    />
+
+    <h:form style="margin-bottom: 15px">
+      <p:breadCrumb class="breadcrumb">
+        <p:menuitem class="home" value="home" outcome="Inicio" />
+        <p:menuitem value="Carreteras convencionales" />
+        <p:menuitem value="Analisis estándar" />
+        <p:menuitem value="Intensidad máxima" />
+      </p:breadCrumb>
+    </h:form>
+
+    <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+    <h:form class="formulario" id="form">
+      <p:growl escape="false" id="growl" showDetail="true" />
+      <p:fieldset
+        class="intensidad"
+        legend="Nivel de servicio y FHP"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Nivel de servicio"></p:outputLabel>
+          <div>
+            <p:selectOneMenu
+              id="servicio"
+              value="#{intensidadMaximaConvenvionalesEstandar.nivelServicio}"
+            >
+              <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+              <f:selectItem itemLabel="A-BLANCO" itemValue="A-BLANCO" />
+              <f:selectItem itemLabel="B-VERDE" itemValue="B-VERDE" />
+              <f:selectItem itemLabel="C-AMARILLO" itemValue="C-AMARILLO" />
+              <f:selectItem itemLabel="D-ROJO" itemValue="D-ROJO" />
+              <f:selectItem itemLabel="E-NEGRO" itemValue="E-NEGRO" />
+            </p:selectOneMenu>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="F.H.P (Factor Hora Punta)" />
+          <p:inputNumber
+            value="#{intensidadMaximaConvenvionalesEstandar.fhp}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="velocidad"
+        legend="Velocidad"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Velocidad medida en campo (km/h)"
+          ></p:outputLabel>
+          <p:inputNumber
+            onchange="disableInputVelocidadEstandar()"
+            id="velocidad_medida"
+            value="#{intensidadMaximaConvenvionalesEstandar.velocidadMedida}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="V.L.B (Velocidad Libre Básica) de la vía (km/h)"
+          />
+          <p:inputNumber
+            onchange="disableInputVelocidadEstandar()"
+            id="vlb"
+            value="#{intensidadMaximaConvenvionalesEstandar.vlb}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="geometria"
+        legend="Geometría de la vía"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; max-height: 280px"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Anchura del carril(m.)" />
+          <p:selectOneMenu
+            widgetVar="anchura"
+            id="anchura"
+            value="#{intensidadMaximaConvenvionalesEstandar.anchoCarril}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="#{null}" />
+            <f:selectItems
+              value="#{intensidadMaximaConvenvionalesEstandar.opciones_anchura}"
+            />
+          </p:selectOneMenu>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Anchura del arcén (m.)" />
+          <p:selectOneMenu
+            widgetVar="anchura_arcen"
+            id="anchura_arcen"
+            value="#{intensidadMaximaConvenvionalesEstandar.anchoArcen}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="#{null}" />
+            <f:selectItems
+              value="#{intensidadMaximaConvenvionalesEstandar.opciones_arcen_anchura}"
+            />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 3.0 HASTA 3.6  -->
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Número de accesos (por km.)" />
+          <p:selectOneMenu
+            widgetVar="accesos"
+            id="accesos"
+            value="#{intensidadMaximaConvenvionalesEstandar.accesos}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="0" itemValue="0" />
+            <f:selectItem itemLabel="6" itemValue="6" />
+            <f:selectItem itemLabel="12" itemValue="12" />
+            <f:selectItem itemLabel="18" itemValue="18" />
+            <f:selectItem itemLabel="24" itemValue="24" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 0.3 HASTA 1.2  -->
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="varios"
+        legend="Ajustes varios"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (camiones y autobuses)" />
+          <p:inputNumber
+            value="#{intensidadMaximaConvenvionalesEstandar.pesadosCamiones}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (vehículos de recreo)" />
+          <p:inputNumber
+            value="#{intensidadMaximaConvenvionalesEstandar.pesadosRecreo}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Tipo de terreno" />
+          <p:selectOneMenu
+            id="terreno"
+            value="#{intensidadMaximaConvenvionalesEstandar.tipoTerreno}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="Llano" itemValue="Llano" />
+            <f:selectItem itemLabel="Accidentado" itemValue="Accidentado" />
+          </p:selectOneMenu>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Reparto (%) por sentidos" />
+          <p:selectOneMenu
+            id="reparto"
+            value="#{intensidadMaximaConvenvionalesEstandar.repartoSentidos}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="50-50" itemValue="50-50" />
+            <f:selectItem itemLabel="60-40" itemValue="60-40" />
+            <f:selectItem itemLabel="70-30" itemValue="70-30" />
+            <f:selectItem itemLabel="80-20" itemValue="80-20" />
+            <f:selectItem itemLabel="90-10" itemValue="90-10" />
+          </p:selectOneMenu>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% con prohibición de adelantar" />
+          <p:selectOneMenu
+            id="prohibicion"
+            value="#{intensidadMaximaConvenvionalesEstandar.prohibicionAdelantar}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="0" itemValue="0" />
+            <f:selectItem itemLabel="20" itemValue="20" />
+            <f:selectItem itemLabel="40" itemValue="40" />
+            <f:selectItem itemLabel="60" itemValue="60" />
+            <f:selectItem itemLabel="80" itemValue="80" />
+            <f:selectItem itemLabel="100" itemValue="100" />
+          </p:selectOneMenu>
+        </div>
+      </p:fieldset>
+      <p:fieldset
+        class="tipo_carretera"
+        legend="Tipo de carretera"
+        style="width: 90%; max-height: 90px"
+        toggleable="true"
+        toggleSpeed="500"
+      >
+        <div style="display: flex; justify-content: center">
+          <p:selectOneRadio
+            value="#{intensidadMaximaConvenvionalesEstandar.tipoCarretera}"
+            widgetVar="tipoCarretera"
+            onchange="radiobuttonTipoCarretera()"
+          >
+            <f:selectItem
+              itemLabel="Carretera de clase I"
+              itemValue="Carretera de tipo I"
+            />
+            <f:selectItem
+              itemLabel="Carretera de clase II"
+              itemValue="Carretera de tipo II"
+            />
+          </p:selectOneRadio>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="adicionales"
+        legend="Datos adicionales"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="% tiempo siguiendo a otro vehículo "
+          ></p:outputLabel>
+          <p:inputNumber
+            id="porcTiempo"
+            value="#{intensidadMaximaConvenvionalesEstandar.porcTiempoSiguiendo}"
+            readonly="true"
+            symbol="%"
+            symbolPosition="s"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Velocidad media de recorrido (km/h)" />
+          <p:inputNumber
+            id="velocidadMedia"
+            value="#{intensidadMaximaConvenvionalesEstandar.velocidadMedia}"
+            readonly="true"
+            symbol="km/h"
+            symbolPosition="s"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="nivel_servicio"
+        legend="Cálculo intensidad máxima"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 95%; display: flex; justify-content: center"
+      >
+        <div
+          class="input"
+          style="display: flex; align-items: center; margin-right: 50px"
+        >
+          <p:commandButton
+            action="#{intensidadMaximaConvenvionalesEstandar.calculo()}"
+            update="growl intensidadMax porcTiempo velocidadMedia anchura anchura_arcen"
+            value="Calcular"
+            style="width: 200px; font-size: 22px"
+          ></p:commandButton>
+        </div>
+
+        <div
+          class="input"
+          style="display: flex; align-items: center; margin-right: 50px"
+        >
+          <div
+            style="display: flex; flex-direction: column; align-items: flex-end"
+          >
+            <p:commandButton
+              action="#{intensidadMaximaConvenvionalesEstandar.calculoIMD()}"
+              update="IMD"
+              value="Calc. IMD calzada"
+              style="width: 212px; font-size: 18px"
+            ></p:commandButton>
+
+            <div
+              style="display: flex; flex-direction: row; align-items: center"
+            >
+              <p:outputLabel value="% de IMD" style="margin-right: 8px" />
+              <p:inputText
+                class="porcIMD"
+                value="#{intensidadMaximaConvenvionalesEstandar.porcIMD}"
+              ></p:inputText>
+            </div>
+            <div style="display: flex; flex-direction: row">
+              <p:inputText
+                id="IMD"
+                value="#{intensidadMaximaConvenvionalesEstandar.IMD}"
+                readonly="true"
+              ></p:inputText>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="capacidad_servicio"
+          style="display: flex; flex-direction: column; width: 300px"
+        >
+          <h3>Intensidad horaria máxima (suma ambos sentidos)</h3>
+          <p:inputText
+            id="intensidadMax"
+            value="#{intensidadMaximaConvenvionalesEstandar.intensidadMax}"
+            readonly="true"
+          ></p:inputText>
+        </div>
+      </p:fieldset>
+    </h:form>
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <h:form id="prueba">
+        <p:commandButton
+          value="Ver tabla de variales"
+          onclick="PF('dlgTablas').show();"
+          style="
+            width: 240px;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-right: 15px;
+          "
+          update="tabla1 tabla2 tabla3 tabla4 tabla5 tabla6 tabla7 tabla8 tabla9 tabla10 tabla11 tabla12 tabla13 tabla14 tabla15 tabla16 tabla17 tabla18 tabla29 tabla30 tabla31 tabla32 tabla33 tabla34 tabla36 tabla37 tabla38"
+        ></p:commandButton>
+        <p:dialog
+          header="Carreteras convencionales - Análisis estándar - Intensidad máxima - HCM 2016"
+          widgetVar="dlgTablas"
+          modal="true"
+          width="90%"
+          height="90%"
+        >
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; flex-direction: row">
+              <table
+                style="text-align: center; text-align: center; width: 50%"
+                class="tablaDatos"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>% de la IMD para usar como IMH</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.porcIMD}"
+                        id="tabla1"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD (sumando ambos sentidos)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.IMD}"
+                        id="tabla2"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad horaria máxima (sumando ambos sentidos)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.intensidadMax}"
+                        id="tabla3"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>FHP (Factor Hora Punta)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.fhp}"
+                        id="tabla4"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad medida en campo (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.velocidadMedida}"
+                        id="tabla5"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>VLB (Velocidad Libre Básica) de la vía (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.vlb}"
+                        id="tabla6"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Anchura de carril (m.)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.anchoCarril}"
+                        id="tabla7"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Anchura de arcén (m.)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.anchoArcen}"
+                        id="tabla8"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nº de accesos por km</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.accesos}"
+                        id="tabla9"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipo de carretera</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.tipoCarretera}"
+                        id="tabla10"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (camiones y autobuses)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.pesadosCamiones}"
+                        id="tabla11"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (vehículos de recreo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.pesadosRecreo}"
+                        id="tabla12"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipo de terreno</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.tipoTerreno}"
+                        id="tabla13"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Reparto (%) por sentidos</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.repartoSentidos}"
+                        id="tabla14"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% prohibición de adelantar</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.prohibicionAdelantar}"
+                        id="tabla15"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% tiempo siguiendo a otro vehículo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.porcTiempoSiguiendo}"
+                        id="tabla16"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad media de recorrido (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.velocidadMedia}"
+                        id="tabla17"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nivel de servicio</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.nivelServicio}"
+                        id="tabla18"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table
+                style="
+                  text-align: center;
+                  width: 50%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaVariables"
+              >
+                <thead>
+                  <th>Variable intermedia de los calculos</th>
+                  <th>Valor</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Velocidad Libre Calculada</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.VLCalculada}"
+                        id="tabla29"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Corrección - Ancho Carril</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.factorCorreccionAnchoCarril}"
+                        id="tabla30"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Corrección - Ancho Arcén</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.factorCorreccionAnchoArcen}"
+                        id="tabla31"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Corrección - Por Accesos</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.factorCorreccionPorAccesos}"
+                        id="tabla32"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Factor Corrección - Efecto trazado y Velocidad Media
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.factorCorreccionEfectoTrazadoVelMedia}"
+                        id="tabla33"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Factor Corrección - Prohibición Adelantamiento y Velocidad
+                      media
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.factorCorreccionProhibicionAdelantamientoVelMedia}"
+                        id="tabla34"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Corrección - Efecto trazado y % siguiendo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.factorCorreccionEfectoTrazadoPorcSiguiendo}"
+                        id="tabla36"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad equivalente - % Siguiendo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.intensidadEquivalentePorcSiguiendo}"
+                        id="tabla37"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Prohibición adelantamiento - % siguiendo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{intensidadMaximaConvenvionalesEstandar.factorCorreccionProhibicionAdelantamientoPorcSiguiendo}"
+                        id="tabla38"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+          </div>
+        </p:dialog>
+        <!-- <p:commandButton
+          value="Informe"
+          onclick="PF('dlg2').show();"
+          style="width: 240px; margin-bottom: 10px; margin-top: 15px"
+          update="panelInforme"
+        ></p:commandButton> -->
+        <p:dialog
+          header="Crear informe"
+          widgetVar="dlg2"
+          modal="true"
+          width="386"
+        >
+          <div style="display: flex; flex-direction: column">
+            <h:outputLabel value="Descripción del informe" />
+            <br />
+            <p:inputTextarea
+              value="#{intensidadMaximaConvenvionalesEstandar.decripcion}"
+            ></p:inputTextarea>
+            <br />
+            <p:commandButton
+              value="Abrir en Nueva Pestaña"
+              action="#{intensidadMaximaConvenvionalesEstandar.generarInforme()}"
+              ajax="true"
+              id="panelInforme"
+            />
+          </div>
+        </p:dialog>
+      </h:form>
+    </div>
+    <script src="javascript/NivelServicio.js"></script>
+  </h:body>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Dynamic DataTable with Primefaces</title>
+</h:head>
+<h:body>
+    <h:body>
+   <h:form id="form">
+        <p:panel header="Dynamic Rows Example">
+            <p:spinner value="#{pruebasCalculoMultiple.numberOfRows}" min="1" />
+            <p:commandButton value="Add Rows" action="#{pruebasCalculoMultiple.addRows()}" update="table" />
+        </p:panel>
+
+        <p:dataTable id="table" var="row" value="#{pruebasCalculoMultiple.rows}" rowIndexVar="index" editable="true">
+            <p:column headerText="Input">
+                <p:cellEditor>
+                    <f:facet name="output"><p:inputText value="#{row.input}" /></f:facet>
+                    <f:facet name="input"><p:inputText value="#{row.input}" /></f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column headerText="Result">
+                <p:inputText id="resultado" value="#{row.result}" />
+            </p:column>
+        </p:dataTable>
+
+       <p:commandButton value="Calculate" action="#{pruebasCalculoMultiple.calculate()}" process="@this" update="table" />
+    </h:form>
+</h:body>
+</h:body>
+</html>
+

@@ -1,0 +1,1480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+      url('Resources/img/background.png');
+    background-size: cover;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+  "
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+  <h:head>
+    <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+    <title>Nivel de servicio ramales - Carreteras convencionales</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/predet.css" />
+    <style>
+      .intensidad {
+        grid-column: 1;
+        grid-row: 1/3;
+      }
+
+      .velocidad {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .geometria {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      .adicionales {
+        grid-column: 1;
+        grid-row: 3;
+      }
+      .adicionales .ui-fieldset-content input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .varios {
+        grid-column: 2;
+        grid-row: 3;
+      }
+      .nivel_servicio {
+        grid-column: 1/3;
+        grid-row: 4/5;
+      }
+      .nivel_servicio .input {
+        margin-bottom: 0;
+      }
+      .nivel_servicio .ui-fieldset-content {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+      }
+      .nivel_servicio
+        .ui-fieldset-content
+        .capacidad_servicio
+        .capacidad_VhCS
+        .servicio_input
+        input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+      .nivel_servicio
+        .ui-fieldset-content
+        .capacidad_servicio
+        .capacidad_VhCS
+        .capacidad_input
+        div
+        input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+      .servicio_input {
+        display: flex;
+        flex-direction: column;
+      }
+      .capacidad_inputs input,
+      .servicio_input input {
+        margin-bottom: 3px;
+      }
+      .capacidad_inputs {
+        margin-right: 8px;
+        margin-left: 100px;
+      }
+
+      .capacidad_VhCS label {
+        margin-right: 8px;
+      }
+
+      .capacidad_VhCS .capacidad_input div label {
+        margin-left: 8px;
+      }
+
+      .tablaDatos tbody tr td,
+      .tablaDatos2 tbody tr td,
+      .tablaVariables tbody tr td {
+        padding: 0.25em;
+        text-align: center;
+
+        label {
+          color: #007ad8;
+        }
+      }
+      .tablaDatos thead,
+      .tablaDatos2 thead,
+      .tablaVariables thead {
+        border-bottom: 1px #007ad8 dotted;
+        background-color: #0071d8;
+        color: #f7f7f7;
+      }
+    </style>
+  </h:head>
+
+  <h:body>
+    <header>Nivel de servicio ramales</header>
+    <img
+      class="hamburguer-menu"
+      src="Resources/img/bars-solid.svg"
+      height="30px"
+      style="
+        filter: invert(1);
+        border: none;
+        margin-left: 50px;
+        cursor: pointer;
+      "
+    />
+
+    <h:form style="margin-bottom: 15px">
+      <p:breadCrumb class="breadcrumb">
+        <p:menuitem class="home" value="home" outcome="Inicio" />
+        <p:menuitem value="Carreteras convencionales" />
+        <p:menuitem value="Nivel de servicio ramales" />
+      </p:breadCrumb>
+    </h:form>
+
+    <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+    <h:form class="formulario" id="form">
+      <p:growl escape="false" id="growl" showDetail="true" />
+      <p:fieldset
+        class="intensidad"
+        legend="Intensidad y FHP"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D A (Autopista corriente arriba)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imdAPorcentaje"
+              onchange="disableIntensidadA()"
+              value="#{nivelServRamalConvencionales.imdAPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imdA"
+              onchange="disableIntensidadA()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              value="#{nivelServRamalConvencionales.imdA}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad A horaria (Autopista corriente arriba)"
+          />
+          <p:inputNumber
+            id="intensidadAporc"
+            onchange="disableInputImdA()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServRamalConvencionales.intensidadAhoraria}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D D (Autopista corriente abajo)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imdDPorcentaje"
+              onchange="disableIntensidadD()"
+              value="#{nivelServRamalConvencionales.imdDPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imdD"
+              onchange="disableIntensidadD()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              value="#{nivelServRamalConvencionales.imdD}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad D horaria (Autopista corriente abajo)"
+          />
+          <p:inputNumber
+            id="intensidadDporc"
+            onchange="disableInputImdD()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServRamalConvencionales.intensidadDhoraria}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="I.M.D R del ramal analizado "></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="imdRPorcentaje"
+              onchange="disableIntensidadR()"
+              value="#{nivelServRamalConvencionales.imdRPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              id="imdR"
+              onchange="disableIntensidadR()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              value="#{nivelServRamalConvencionales.imdR}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Intensidad R horaria del ramal analizado" />
+          <p:inputNumber
+            id="intensidadRporc"
+            onchange="disableInputImdR()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServRamalConvencionales.intensidadRhoraria}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D AR del ramal ady. corriente arriba "
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              disabled="true"
+              onchange="disableIntensidadAR()"
+              id="imdARPorcentaje"
+              value="#{nivelServRamalConvencionales.imdARPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              disabled="true"
+              onchange="disableIntensidadAR()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              id="imdAR"
+              value="#{nivelServRamalConvencionales.imdAR}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad AR horaria del ramal ady. corriente arriba"
+          />
+          <p:inputNumber
+            disabled="true"
+            id="intensidadARporc"
+            onchange="disableInputImdAR()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServRamalConvencionales.intensidadARhoraria}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="I.M.D AB del ramal ady. corriente abajo "
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              disabled="true"
+              onchange="disableIntensidadAB()"
+              id="imdABPorcentaje"
+              value="#{nivelServRamalConvencionales.imdABPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              disabled="true"
+              onchange="disableIntensidadAB()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              id="imdAB"
+              value="#{nivelServRamalConvencionales.imdAB}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad AB horaria del ramal ady. corriente abajo"
+          />
+          <p:inputNumber
+            disabled="true"
+            id="intensidadABporc"
+            onchange="disableInputImdAB()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{nivelServRamalConvencionales.intensidadABhoraria}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="F.H.P (Factor Hora Punta)" />
+          <p:inputNumber
+            value="#{nivelServRamalConvencionales.fhp}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="velocidad"
+        legend="Velocidad"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; max-height: 150px"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Velocidad libre en autopista/autovía (km/h)"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{nivelServRamalConvencionales.velocidadLibreAutopista}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Velocidad libre ramal (km/h)" />
+          <p:inputNumber
+            value="#{nivelServRamalConvencionales.velocidadLibreRamal}"
+            symbol="km/h"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="300"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="geometria"
+        legend="Geometría de la vía"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; margin-bottom: 25px"
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Ramal analizado"></p:outputLabel>
+          <p:selectOneMenu
+            widgetVar="ramal_analizado"
+            id="ramal_analizado"
+            onchange="disableLongitudcarril()"
+            value="#{nivelServRamalConvencionales.ramalAnalizado}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="ENTRADA" itemValue="ENTRADA" />
+            <f:selectItem itemLabel="SALIDA" itemValue="SALIDA" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel
+            value="Ramal adyacente corriente arriba"
+          ></p:outputLabel>
+          <p:selectOneMenu
+            widgetVar="ramal_adyacente"
+            id="ramal_adyacente"
+            value="#{nivelServRamalConvencionales.ramalAdyCorriArriba}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="ENTRADA" itemValue="ENTRADA" />
+            <f:selectItem itemLabel="SALIDA" itemValue="SALIDA" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel
+            value="Ramal adyacente corriente abajo"
+          ></p:outputLabel>
+          <p:selectOneMenu
+            widgetVar="ramal_adyacente_abajo"
+            id="ramal_adyacente_abajo"
+            value="#{nivelServRamalConvencionales.ramalAdyCorriAbajo}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="ENTRADA" itemValue="ENTRADA" />
+            <f:selectItem itemLabel="SALIDA" itemValue="SALIDA" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel
+            value="Carriles de la autopista/autovía"
+          ></p:outputLabel>
+          <p:selectOneMenu
+            disabled="true"
+            widgetVar="carriles"
+            id="carriles"
+            value="#{nivelServRamalConvencionales.carrilesAutopista}"
+            onchange="disableLongitudcarril()"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="4 (2 por sentido)" itemValue="0" />
+            <f:selectItem itemLabel="4 (2 por sentido)" itemValue="4" />
+            <f:selectItem itemLabel="6 (3 por sentido)" itemValue="6" />
+            <f:selectItem itemLabel="8 (4 por sentido)" itemValue="8" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Carriles del ramal analizado"></p:outputLabel>
+          <p:selectOneMenu
+            disabled="true"
+            id="carriles_ramal"
+            value="#{nivelServRamalConvencionales.carrilesRamal}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="1" itemValue="0" />
+            <f:selectItem itemLabel="1" itemValue="1" />
+            <f:selectItem itemLabel="2" itemValue="2" />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 2 HASTA 5 value="#{selectOneMenuView.selectedOption}" -->
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Longitud del carril de aceleración (m.)" />
+          <p:inputNumber
+            widgetVar="aceleracion"
+            id="aceleracion"
+            value="#{nivelServRamalConvencionales.longitudCarrilAceleracion}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Longitud del carril de deceleración (m.)" />
+          <p:inputNumber
+            widgetVar="deceleracion"
+            id="deceleracion"
+            value="#{nivelServRamalConvencionales.longitudCarrilDeceleracion}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Distancia al ramal adyacente corriente arriba (m.)"
+          />
+          <p:inputNumber
+            disabled="true"
+            widgetVar="distanciaArriba"
+            id="distanciaArriba"
+            value="#{nivelServRamalConvencionales.distanciaRamalAdyCorriArriba}"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Distancia al ramal adyacente corriente abajo (m.)"
+          />
+          <p:inputNumber
+            disabled="true"
+            widgetVar="distanciaAbajo"
+            id="distanciaAbajo"
+            value="#{nivelServRamalConvencionales.distanciaRamalAdyCorriAbajo}"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="varios"
+        legend="Ajustes varios"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; max-height: 250px"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Ajuste por conductores no habituales"
+          ></p:outputLabel>
+          <p:inputNumber
+            value="#{nivelServRamalConvencionales.conductoresNoHabituales}"
+            decimalSeparator=","
+            decimalSeparatorAlternative="."
+            thousandSeparator=" "
+          >
+          </p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (camiones y autobuses)" />
+          <p:inputNumber
+            value="#{nivelServRamalConvencionales.pesadosCamiones}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="% pesados (vehículos de recreo)" />
+          <p:inputNumber
+            value="#{nivelServRamalConvencionales.pesadosRecreo}"
+            class="porcentaje"
+            symbol="%"
+            symbolPosition="s"
+            decimalPlaces="2"
+            decimalSeparator="."
+            thousandSeparator=","
+            maxValue="100"
+          ></p:inputNumber>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+          class="input"
+        >
+          <p:outputLabel value="Tipo de terreno" />
+          <p:selectOneMenu
+            id="terreno"
+            value="#{nivelServRamalConvencionales.tipoTerreno}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem itemLabel="Llano" itemValue="Llano" />
+            <f:selectItem itemLabel="Ondulado" itemValue="Ondulado" />
+            <f:selectItem itemLabel="Accidentado" itemValue="Accidentado" />
+          </p:selectOneMenu>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="adicionales"
+        legend="Datos adicionales"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad 12 (Veh.equiv./hora)"
+          ></p:outputLabel>
+          <p:inputNumber
+            id="intensidad12"
+            value="#{nivelServRamalConvencionales.intensidad12}"
+            readonly="true"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Intensidad A (Veh.equiv./hora)"></p:outputLabel>
+          <p:inputNumber
+            id="intensidadA"
+            value="#{nivelServRamalConvencionales.intensidadA}"
+            readonly="true"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Intensidad D (Veh.equiv./hora)"></p:outputLabel>
+          <p:inputNumber
+            id="intensidadD"
+            value="#{nivelServRamalConvencionales.intensidadD}"
+            readonly="true"
+          ></p:inputNumber>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Intensidad R (Veh.equiv./hora)"></p:outputLabel>
+          <p:inputNumber
+            id="intensidadR"
+            value="#{nivelServRamalConvencionales.intensidadR}"
+            readonly="true"
+          ></p:inputNumber>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="nivel_servicio"
+        legend="Cálculo nivel de servicio"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 95%"
+      >
+        <div
+          class="capacidad_servicio"
+          style="display: flex; flex-direction: column"
+        >
+          <div
+            class="capacidad_VhCS"
+            style="
+              display: flex;
+              flex-direction: row;
+              margin-right: 50px;
+              align-items: center;
+            "
+          >
+            <p:commandButton
+              value="Calcular"
+              style="margin-right: 2em; width: 400px; font-size: 22px"
+              action="#{nivelServRamalConvencionales.calculo()}"
+              update="growl intensidadAporc intensidadDporc intensidadRporc intensidadARporc intensidadABporc capacidadAutopista capacidadRamal intensidad12 intensidadA intensidadD intensidadR porcAgotamiento resultado"
+            />
+
+            <div
+              class="servicio_input"
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                margin-left: 20em;
+              "
+            >
+              <p:inputText
+                id="resultado"
+                value="#{nivelServRamalConvencionales.resultadoCalculo}"
+                readonly="true"
+                style="width: 325px"
+              ></p:inputText>
+              <p:progressBar
+                id="porcAgotamiento"
+                value="#{nivelServRamalConvencionales.porcentajeAgotamiento}"
+                labelTemplate="% de Agotamiento: #{nivelServRamalConvencionales.porcentajeAgotamiento}%"
+                displayOnly="true"
+                style="
+                  width: 325px;
+                  height: 24px;
+                  display: flex;
+                  align-items: center;
+                "
+              />
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                margin-left: 20em;
+              "
+              class="capacidad_input"
+            >
+              <div
+                style="display: flex; flex-direction: row; align-items: center"
+              >
+                <p:outputLabel
+                  value="Capacidad de la autopista (Veh./hora)"
+                ></p:outputLabel>
+                <p:inputNumber
+                  id="capacidadAutopista"
+                  value="#{nivelServRamalConvencionales.capacidadAutopista}"
+                  class="porcentaje"
+                  readonly="true"
+                ></p:inputNumber>
+              </div>
+              <div
+                style="display: flex; flex-direction: row; align-items: center"
+              >
+                <p:outputLabel
+                  value="Capacidad del tronco del ramal (Veh./hora)"
+                ></p:outputLabel>
+                <p:inputNumber
+                  id="capacidadRamal"
+                  value="#{nivelServRamalConvencionales.capacidadTronco}"
+                  class="porcentaje"
+                  readonly="true"
+                ></p:inputNumber>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p:fieldset>
+    </h:form>
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <h:form id="prueba">
+        <p:commandButton
+          value="Ver tabla de variales"
+          onclick="PF('dlgTablas').show();"
+          style="
+            width: 240px;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-right: 15px;
+          "
+          update="tabla1 tabla2 tabla3 tabla4 tabla5 tabla6 tabla7 tabla8 tabla9 tabla10 tabla11 tabla12 tabla13 tabla14 tabla15 tabla16 tabla17 tabla18 tabla19 tabla20 tabla21 tabla22 tabla23 tabla24 tabla25 tabla26 tabla27 tabla28 tabla29 tabla30 tabla31 tabla32 tabla33 tabla34 tabla35 tabla36 tabla37 tabla38 tabla39  tabla46 tabla47 tabla48 tabla49"
+        ></p:commandButton>
+        <p:dialog
+          header="Carreteras convencionales - Nivel de servicio ramales - HCM 2016"
+          widgetVar="dlgTablas"
+          modal="true"
+          width="90%"
+          height="90%"
+        >
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; flex-direction: row">
+              <table
+                style="text-align: center; text-align: center; width: 33%"
+                class="tablaDatos"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>% de la IMD A (Autopista corriente arriba)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdAPorcentaje}"
+                        id="tabla1"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD A (Autopista corriente arriba)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdA}"
+                        id="tabla2"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad A horaria (Autopista corriente arriba)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadAhoraria}"
+                        id="tabla3"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD D (Autopista corriente abajo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdDPorcentaje}"
+                        id="tabla4"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD D (Autopista corriente abajo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdD}"
+                        id="tabla5"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad D horaria (Autopista corriente abajo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadDhoraria}"
+                        id="tabla6"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD R del ramal analizado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdRPorcentaje}"
+                        id="tabla7"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD R del ramal analizado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdR}"
+                        id="tabla8"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad R horaria del ramal analizado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadRhoraria}"
+                        id="tabla9"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD AR del ramal ady. corriente arriba</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdARPorcentaje}"
+                        id="tabla10"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>IMD AR del ramal ady. corriente arriba</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdAR}"
+                        id="tabla11"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Intensidad AR horaria del ramal ady. corriente arriba
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadARhoraria}"
+                        id="tabla12"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de la IMD AB del ramal ady. corriente abajo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdABPorcentaje}"
+                        id="tabla13"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>IMD AB del ramal ady. corriente abajo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.imdAB}"
+                        id="tabla14"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Intensidad AB horaria del ramal ady. corriente abajo
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadABhoraria}"
+                        id="tabla15"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>FHP (Factor Hora Punta)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.fhp}"
+                        id="tabla16"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad libre en autopista/autovía (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.velocidadLibreAutopista}"
+                        id="tabla17"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Velocidad libre ramal (km/h)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.velocidadLibreRamal}"
+                        id="tabla18"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table
+                style="
+                  text-align: center;
+                  width: 33%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaDatos2"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Ramal analizado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.ramalAnalizado}"
+                        id="tabla19"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ramal adyacente corriente arriba</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.ramalAdyCorriArriba}"
+                        id="tabla20"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ramal adyacente corriente abajo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.ramalAdyCorriAbajo}"
+                        id="tabla21"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Carriles de la autopista/autovia</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.carrilesAutopista}"
+                        id="tabla22"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Carriles del ramal analizado</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.carrilesRamal}"
+                        id="tabla23"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Longitud del carril de aceleración</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.longitudCarrilAceleracion}"
+                        id="tabla24"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Longitud del carril de deceleración</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.longitudCarrilDeceleracion}"
+                        id="tabla25"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Distancia al ramal ady. corriente arriba (m.)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.distanciaRamalAdyCorriArriba}"
+                        id="tabla26"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Distancia al ramal ady. corriente abajo (m.)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.distanciaRamalAdyCorriAbajo}"
+                        id="tabla27"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad 12</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidad12}"
+                        id="tabla28"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad A</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadA}"
+                        id="tabla29"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad D</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadD}"
+                        id="tabla30"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Intensidad R</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.intensidadR}"
+                        id="tabla31"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Conductores no habituales</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.conductoresNoHabituales}"
+                        id="tabla32"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (cmaiones y autobuses)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.pesadosCamiones}"
+                        id="tabla33"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% pesados (veh. de recreo)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.pesadosRecreo}"
+                        id="tabla34"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipo de terreno</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.tipoTerreno}"
+                        id="tabla35"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nivel de servicio</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.resultadoCalculo}"
+                        id="tabla36"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% de agotamiento</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.porcentajeAgotamiento}"
+                        id="tabla37"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad de la autopista (Veh./hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.capacidadAutopista}"
+                        id="tabla38"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad del tronco del ramal (Veh./hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.capacidadTronco}"
+                        id="tabla39"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table
+                style="
+                  text-align: center;
+                  width: 33%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaVariables"
+              >
+                <thead>
+                  <th>Variable intermedia de los calculos</th>
+                  <th>Valor</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Factor Corrección - Capacidad Autopista</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.factorcapacidadAutopista}"
+                        id="tabla46"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capcidad Tronco Ramal</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.capacidadTroncoRamal}"
+                        id="tabla47"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Corrección - % agotamiento</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.factorporcentajeAgotamiento}"
+                        id="tabla48"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Equivalencia - Vehículos pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.factorEquivalenciaVehPesados}"
+                        id="tabla49"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Factor Equivalencia - Vehículos recreo</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.factorEquivalenciaVehRecreo}"
+                        id="tabla50"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ajuste vehículos pesados</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.ajusteVehiculosPesados}"
+                        id="tabla51"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Densidad - R</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{nivelServRamalConvencionales.densidadR}"
+                        id="tabla52"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+          </div>
+        </p:dialog>
+        <!-- <p:commandButton
+          value="Informe"
+          onclick="PF('dlg2').show();"
+          style="width: 240px; margin-bottom: 10px; margin-top: 15px"
+          update="panelInforme"
+        ></p:commandButton> -->
+        <p:dialog
+          header="Crear informe"
+          widgetVar="dlg2"
+          modal="true"
+          width="386"
+        >
+          <div style="display: flex; flex-direction: column">
+            <h:outputLabel value="Descripción del informe" />
+            <br />
+            <p:inputTextarea
+              value="#{nivelServRamalConvencionales.decripcion}"
+            ></p:inputTextarea>
+            <br />
+            <p:commandButton
+              value="Abrir en Nueva Pestaña"
+              action="#{nivelServRamalConvencionales.generarInforme()}"
+              ajax="true"
+              id="panelInforme"
+            />
+          </div>
+        </p:dialog>
+      </h:form>
+    </div>
+
+    <script src="javascript/NivelServicioRamales.js"></script>
+  </h:body>
+</html>

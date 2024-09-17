@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/XHtml.xhtml to edit this template
+-->
+<!DOCTYPE html>
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  style="
+    background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+      url('Resources/img/background.png');
+    background-size: cover;
+    background-repeat: repeat-y;
+    width: 100%;
+    height: 100%;
+  "
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+  <h:head>
+    <link rel="icon" type="image/x-icon" href="Resources/img/favicon.ico" />
+
+    <title>Capacidad de entrada - Glorietas interurbanas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/predet.css" />
+    <style>
+      .intensidad {
+        grid-column: 1/3;
+        grid-row: 1;
+      }
+
+      .velocidad {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .geometria {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      .varios {
+        grid-column: 2;
+        grid-row: 2/4;
+      }
+      .adicionales {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .adicionales .ui-fieldset-content input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .nivel_servicio {
+        grid-column: 1/3;
+        grid-row: 5;
+      }
+      .nivel_servicio .input {
+        margin-bottom: 0;
+      }
+      .nivel_servicio .input .input {
+        margin-bottom: 8px;
+      }
+
+      .nivel_servicio .input .input label {
+        margin-right: 8px;
+      }
+      .nivel_servicio .ui-fieldset-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+      }
+
+      .nivel_servicio .ui-fieldset-content div input {
+        color: blue;
+        font-size: 15px;
+        font-weight: bold;
+      }
+
+      .tablaDatos tbody tr td,
+      .tablaVariables tbody tr td {
+        padding: 0.5em;
+        text-align: center;
+
+        label {
+          color: #007ad8;
+        }
+      }
+      .tablaDatos thead,
+      .tablaVariables thead {
+        border-bottom: 1px #007ad8 dotted;
+        background-color: #0071d8;
+        color: #f7f7f7;
+      }
+    </style>
+  </h:head>
+
+  <h:body>
+    <header>Capacidad de entrada</header>
+    <img
+      class="hamburguer-menu"
+      src="Resources/img/bars-solid.svg"
+      height="30px"
+      style="
+        filter: invert(1);
+        border: none;
+        margin-left: 50px;
+        cursor: pointer;
+      "
+    />
+
+    <h:form style="margin-bottom: 15px">
+      <p:breadCrumb class="breadcrumb">
+        <p:menuitem class="home" value="home" outcome="Inicio" />
+        <p:menuitem value="Glorietas interurbanas" />
+        <p:menuitem value="Capacidad de entrada" />
+      </p:breadCrumb>
+    </h:form>
+
+    <ui:include src="componentes/menu.xhtml" class="menu"></ui:include>
+
+    <h:form class="formulario" id="form">
+      <p:growl escape="false" id="growl" showDetail="true" />
+      <p:fieldset
+        class="intensidad"
+        legend="Intensidades y % de pesados"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 95%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="IMD Tráfico que circula por el anillo, delante de la entrada"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              onchange="disableInputIntensidadAnillo()"
+              id="imdAPorc"
+              value="#{capacidadEntradaGlorietas.imdAnilloPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              onchange="disableInputIntensidadAnillo()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              id="imdA"
+              value="#{capacidadEntradaGlorietas.imdAnillo}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad horaria (Tráfico que circula por el anillo, delante de la entrada)"
+          />
+          <p:inputNumber
+            onchange="disableInputImdAnillo()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{capacidadEntradaGlorietas.intensidadAnillo}"
+            id="intensidadA"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="% de pesados del tráfico que circula por el anillo delante de la entrada"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              value="#{capacidadEntradaGlorietas.porcPesadosAnillo}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+          </div>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="IMD Tráfico de salida del ramal analizado"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              onchange="disableInputIntensidadSalida()"
+              id="imdSPorc"
+              value="#{capacidadEntradaGlorietas.imdSalidaPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              onchange="disableInputIntensidadSalida()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              id="imdS"
+              value="#{capacidadEntradaGlorietas.imdSalida}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad horaria (Tráfico de salida del ramal analizado)"
+          />
+          <p:inputNumber
+            onchange="disableInputImdSalida()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{capacidadEntradaGlorietas.intensidadSalida}"
+            id="intensidadS"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="% de pesados del tráfico de salida del ramal analizado"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              value="#{capacidadEntradaGlorietas.porcPesadosSalida}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+          </div>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="IMD Tráfico de entrada del ramal analizado"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              onchange="disableInputIntensidadEntrada()"
+              id="imdEPorc"
+              value="#{capacidadEntradaGlorietas.imdEntradaPorcentaje}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+            <p:inputNumber
+              onchange="disableInputIntensidadEntrada()"
+              inputmode="decimal"
+              decimalPlaces="0"
+              id="imdE"
+              value="#{capacidadEntradaGlorietas.imdEntrada}"
+            >
+            </p:inputNumber>
+          </div>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Intensidad horaria (Tráfico de entrada del ramal analizado)"
+          />
+          <p:inputNumber
+            onchange="disableInputImdEntrada()"
+            inputmode="decimal"
+            decimalPlaces="0"
+            value="#{capacidadEntradaGlorietas.intensidadEntrada}"
+            id="intensidadE"
+          ></p:inputNumber>
+        </div>
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="% de pesados del tráfico de entrada del ramal analizado"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              value="#{capacidadEntradaGlorietas.porcPesadosEntrada}"
+              class="porcentaje"
+              symbol="%"
+              symbolPosition="s"
+              decimalPlaces="2"
+              decimalSeparator="."
+              thousandSeparator=","
+              maxValue="100"
+            ></p:inputNumber>
+          </div>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="adicionales"
+        legend="Datos adicionales"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Tráfico anillo (Veh. equiv./hora)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="traficoA"
+              value="#{capacidadEntradaGlorietas.traficoAnillo}"
+            ></p:inputNumber>
+          </div>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Tráfico salida ramal analizado (Veh. equiv./hora)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="traficoS"
+              value="#{capacidadEntradaGlorietas.traficoSalida}"
+            ></p:inputNumber>
+          </div>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Tráfico entrada ramal analizado (Veh. equiv./hora)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="traficoE"
+              value="#{capacidadEntradaGlorietas.traficoEntrada}"
+            ></p:inputNumber>
+          </div>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Capacidad de entrada (Veh. equiv./hora)"
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              id="capacidadE"
+              value="#{capacidadEntradaGlorietas.capacidadEntrada}"
+            ></p:inputNumber>
+          </div>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="geometria"
+        legend="Geometría de la glorieta"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 90%; max-height: 280px"
+      >
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel value="Configuración de la glorieta" />
+          <p:selectOneMenu
+            id="configGlorieta"
+            value="#{capacidadEntradaGlorietas.configGlorieta}"
+          >
+            <f:selectItem itemLabel="Selecciona un valor" itemValue="" />
+            <f:selectItem
+              itemLabel="Glorietas de 1 carril"
+              itemValue="Glorietas de 1 carril"
+            />
+            <f:selectItem
+              itemLabel="Glorietas de 2 carriles (diámetro menor 30m)"
+              itemValue="Glorietas de 2 carriles (diámetro menor 30m)"
+            />
+            <f:selectItem
+              itemLabel="Glorietas de 2 carriles (diámetro mayor 30m)"
+              itemValue="Glorietas de 2 carriles (diámetro mayor 30m)"
+            />
+          </p:selectOneMenu>
+          <!-- AQUI UN SELECTOR DE NUMERO DESDE 0.3 HASTA 1.2  -->
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <p:outputLabel
+            value="Nº total de carriles del ramal de entrada "
+          ></p:outputLabel>
+          <div>
+            <p:inputNumber
+              value="#{capacidadEntradaGlorietas.numCarriles}"
+            ></p:inputNumber>
+          </div>
+        </div>
+      </p:fieldset>
+
+      <p:fieldset
+        class="nivel_servicio"
+        legend="Cálculo de la capacidad de entrada"
+        toggleable="true"
+        toggleSpeed="500"
+        style="width: 95%; display: flex; justify-content: center"
+      >
+        <div
+          class="input"
+          style="display: flex; align-items: center; margin-right: 50px"
+        >
+          <p:commandButton
+            action="#{capacidadEntradaGlorietas.calculo()}"
+            update="growl resultado difCapacidad porcAgotamiento traficoA traficoE traficoS capacidadE intensidadA intensidadE intensidadS"
+            value="Calcular"
+            style="width: 200px; font-size: 22px"
+          ></p:commandButton>
+        </div>
+
+        <div
+          class="input"
+          style="display: flex; align-items: center; margin-right: 50px"
+        >
+          <p:inputText
+            id="resultado"
+            value="#{capacidadEntradaGlorietas.resultadoCalculo}"
+            readonly="true"
+            style="width: 500px; text-align: center"
+          ></p:inputText>
+        </div>
+
+        <div
+          class="input"
+          style="
+            display: flex;
+            align-items: flex-end;
+            margin-right: 50px;
+            flex-direction: column;
+          "
+        >
+          <div class="input">
+            <p:outputLabel value="Diferencia de capacidad" />
+
+            <p:inputText
+              id="difCapacidad"
+              value="#{capacidadEntradaGlorietas.difCapacidad}"
+              readonly="true"
+              style="width: 212px"
+            ></p:inputText>
+          </div>
+          <div class="input" style="display: flex; flex-direction: row">
+            <p:outputLabel value="% agotamiendo de capacidad" />
+            <p:progressBar
+              id="porcAgotamiento"
+              value="#{capacidadEntradaGlorietas.porcAgotamiento}"
+              labelTemplate="#{capacidadEntradaGlorietas.porcAgotamiento}%"
+              displayOnly="true"
+              style="
+                width: 212px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+              "
+            />
+          </div>
+        </div>
+      </p:fieldset>
+    </h:form>
+    <div
+      style="
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <h:form id="prueba">
+        <p:commandButton
+          value="Ver tabla de variales"
+          onclick="PF('dlgTablas').show();"
+          style="
+            width: 240px;
+            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-right: 15px;
+          "
+          update="tabla1 tabla2 tabla3 tabla4 tabla5 tabla6 tabla7 tabla8 tabla9 tabla10 tabla11 tabla12 tabla13 tabla14 tabla18 tabla19"
+        ></p:commandButton>
+        <p:dialog
+          header="Glorietas interurbanas - Capacidad de entrada - HCM 2016"
+          widgetVar="dlgTablas"
+          modal="true"
+          width="90%"
+          height="90%"
+        >
+          <div style="display: flex; flex-direction: column">
+            <div style="display: flex; flex-direction: row">
+              <table
+                style="text-align: center; text-align: center; width: 50%"
+                class="tablaDatos"
+              >
+                <thead>
+                  <th>Datos</th>
+                  <th>Resultados</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      Intensidad horaria (Tráfico que circula por el anillo,
+                      delante de la entrada) (Veh./h)
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.intensidadAnillo}"
+                        id="tabla1"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      % de pesados del tráfico que circula por el anillo,
+                      delante de la entrada
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.porcPesadosAnillo}"
+                        id="tabla2"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Intensidad horaria (Tráfico de salida del ramal analizado)
+                      (Veh./h)
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.intensidadSalida}"
+                        id="tabla3"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      % de pesados del tráfico de salida del ramal analizado
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.porcPesadosSalida}"
+                        id="tabla4"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Intensidad horaria (Tráfico de entrada del ramal
+                      analizado) (Veh./h)
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.intensidadEntrada}"
+                        id="tabla5"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      % de pesados del tráfico de entrada del ramal analizado
+                    </td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.porcPesadosEntrada}"
+                        id="tabla6"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nº total de carriles del ramal de entrada</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.numCarriles}"
+                        id="tabla7"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Configuración de la glorieta</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.configGlorieta}"
+                        id="tabla8"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Trafico anillo (Veh. equiv./hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.traficoAnillo}"
+                        id="tabla9"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Trafico salida ramal analizado (Veh. equiv./hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.traficoSalida}"
+                        id="tabla10"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Trafico entrada ramal analizado (Veh. equiv./hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.traficoEntrada}"
+                        id="tabla11"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Capacidad de entrada (Veh. equiv./hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.capacidadEntrada}"
+                        id="tabla12"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Diferencia de capacidad (Veh. equiv./hora)</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.difCapacidad}"
+                        id="tabla13"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>% agotamiento de capacidad</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.porcAgotamiento}"
+                        id="tabla14"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <table
+                style="
+                  text-align: center;
+                  width: 50%;
+                  border-left: 1px #007ad9 solid;
+                "
+                class="tablaVariables"
+              >
+                <thead>
+                  <th>Variable intermedia de los calculos</th>
+                  <th>Valor</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Coeficiente corrección - Geometría Acceso</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.coeficienteCorreccionGeometriaAcceso}"
+                        id="tabla18"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Coeficiente diámetro de la Glorieta</td>
+                    <td>
+                      <p:outputLabel
+                        value="#{capacidadEntradaGlorietas.coeficienteDiametroGlorieta}"
+                        id="tabla19"
+                      ></p:outputLabel>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+          </div>
+        </p:dialog>
+        <!--  <p:commandButton
+          value="Informe"
+          onclick="PF('dlg2').show();"
+          style="width: 240px; margin-bottom: 10px; margin-top: 15px"
+          update="panelInforme"
+        ></p:commandButton> -->
+        <p:dialog
+          header="Crear informe"
+          widgetVar="dlg2"
+          modal="true"
+          width="386"
+        >
+          <div style="display: flex; flex-direction: column">
+            <h:outputLabel value="Descripción del informe" />
+            <br />
+            <p:inputTextarea
+              value="#{capacidadEntradaGlorietas.decripcion}"
+            ></p:inputTextarea>
+            <br />
+            <p:commandButton
+              value="Abrir en Nueva Pestaña"
+              action="#{capacidadEntradaGlorietas.generarInforme()}"
+              ajax="true"
+              id="panelInforme"
+            />
+          </div>
+        </p:dialog>
+      </h:form>
+    </div>
+    <script src="javascript/NivelServicio.js"></script>
+  </h:body>
+</html>
